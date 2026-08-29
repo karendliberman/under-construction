@@ -1,0 +1,17 @@
+[project]
+name = "uc-agent"
+version = "0.0.0"
+description = "Under Construction — the drafting worker."
+requires-python = ">=3.12"
+dependencies = [
+    "psycopg[binary]>=3.2",
+    "claude-agent-sdk>=0.1.0",
+    "PyYAML>=6.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["agent"]

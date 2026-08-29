@@ -1,0 +1,26 @@
+# The ONLY file in playbooks/ the web service may read (invariant 2).
+# Labels and filenames — never prose.
+#
+# Adding a cause of action is two files and an entry here.
+
+causes_of_action:
+  - id: breach-of-contract
+    label: Breach of Contract
+
+jurisdictions:
+  - id: sdny
+    label: S.D.N.Y.
+
+# Which combinations actually have a playbook. The picker greys out the rest.
+# Layers compose in this fixed order: shared -> procedural -> substantive ->
+# jurisdictional. Fixed ordering is what makes resolve_playbook deterministic
+# (invariant 6), which is what lets us store only a git SHA (invariant 5).
+combinations:
+  - cause_of_action: breach-of-contract
+    jurisdiction: sdny
+    layers:
+      - _shared/guardrails.md
+      - _shared/house-style.md
+      - procedural/rule-12b6-federal.md
+      - causes-of-action/breach-of-contract.md
+      - jurisdictions/sdny.md

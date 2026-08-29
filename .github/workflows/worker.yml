@@ -1,0 +1,26 @@
+name: worker
+
+# The worker's image contains all of playbooks/, so any playbook edit rebuilds
+# it — and only it.
+on:
+  push:
+    paths:
+      - "services/agent/**"
+      - "playbooks/**"
+      - ".github/workflows/worker.yml"
+  pull_request:
+    paths:
+      - "services/agent/**"
+      - "playbooks/**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ./services/agent
+      - name: Import check
+        run: python -c "import agent.loop; print('worker imports cleanly')"
