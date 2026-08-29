@@ -11,7 +11,11 @@ services:
     runtime: docker
     dockerfilePath: ./apps/web/Dockerfile
     dockerContext: .
-    plan: starter
+    # Free tier: spins down when idle, ~50s cold start on the next request.
+    # Fine for two internal users. The worker cannot be free — Render has no
+    # free tier for background workers, and a process that polls every 3s is
+    # exactly what a free tier is built to prevent.
+    plan: free
     healthCheckPath: /
     buildFilter:
       paths:
