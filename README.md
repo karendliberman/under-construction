@@ -46,14 +46,31 @@ docker build -f services/agent/Dockerfile -t uc-agent .
 
 ## Where we are
 
-Phase 0 of the backlog.
+**Phase 0 complete.** Both services are deployed on Render and pass messages
+through Neon Postgres, with the database as the only interface between them.
 
-Done: layout, both Dockerfiles, Neon (dev + prod branches), the first migration,
-and the pipe proven **locally** — the web app writes a queued row, the Python
-worker claims it with `FOR UPDATE SKIP LOCKED` and writes back.
+- https://uc-web.onrender.com  (web, free tier — spins down when idle)
+- uc-agent (background worker, starter)
 
-Next: 0.4 Render (both services from render.yaml) -> 0.5 secrets in the Render
-env -> 0.6 the same proof, in production.
+Verified in production: a row posted to the web service is claimed by the
+worker with `FOR UPDATE SKIP LOCKED` and completed in ~3 seconds.
 
-Local dev uses the Neon `dev` branch; production gets its own connection string
-set directly in Render.
+Next: Phase 1 — the marketing page, `users`, login, and middleware gating
+`/drafts/*`, `/admin/*` and `/api/generations/*`.
+
+### Cost note
+
+Phases 1 and 2 do not touch the worker. Suspend `uc-agent` in Render while
+working on them and resume when needed. The worker moves to a 1 CPU / 2 GB
+instance at Phase 3, when the Agent SDK actually runs — Anthropic's floor is
+~1 GiB per concurrent agent, above what the starter instance provides.
+
+### Before deploying
+
+Build from a clean clone, not the working tree — git does not track empty
+directories, and a local build will happily copy files Render never receives:
+
+```bash
+git clone . /tmp/clone-test && cd /tmp/clone-test
+docker build --no-cache -f apps/web/Dockerfile -t uc-web:test .
+```
