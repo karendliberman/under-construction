@@ -11,7 +11,7 @@ export function SignOutButton() {
         router.push("/login");
         router.refresh();
       }}
-      className="text-sm text-neutral-600 underline underline-offset-4"
+      className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
     >
       Sign out
     </button>

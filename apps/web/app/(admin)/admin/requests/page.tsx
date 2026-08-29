@@ -12,17 +12,21 @@ export default async function AdminRequestsPage() {
     .orderBy(desc(accessRequests.createdAt));
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-20">
-      <h1 className="text-2xl font-semibold tracking-tight">Access requests</h1>
-      <p className="mt-2 text-sm text-neutral-600">
+    <main className="mx-auto max-w-3xl px-6 py-12">
+      <h1 className="font-serif text-3xl tracking-tight">Access requests</h1>
+      <p className="prose-legal mt-2 text-sm text-muted-foreground">
         Approving creates the account and produces a set-password link. Send it
-        to the address shown — that address is what makes the link meaningful.
+        to the address shown — sending it there is what makes the link
+        meaningful, so don&apos;t send it anywhere else.
       </p>
 
       {pending.length === 0 ? (
-        <p className="mt-10 rounded-lg border border-dashed border-neutral-300 p-10 text-center text-neutral-500">
-          Nothing pending.
-        </p>
+        <div className="mt-10 rounded-lg border border-dashed border-border p-16 text-center">
+          <p className="font-serif text-lg">Nothing pending</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            New requests from the public page appear here.
+          </p>
+        </div>
       ) : (
         <ul className="mt-8 space-y-4">
           {pending.map((r) => (
@@ -39,10 +43,6 @@ export default async function AdminRequestsPage() {
           ))}
         </ul>
       )}
-
-      <p className="mt-10 text-sm">
-        <a href="/drafts" className="underline underline-offset-4">Back to drafts</a>
-      </p>
     </main>
   );
 }

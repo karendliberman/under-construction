@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 type State = { kind: "idle" | "sending" } | { kind: "done" | "error"; message: string };
 
@@ -32,75 +36,49 @@ export function RequestAccessForm() {
 
   if (state.kind === "done") {
     return (
-      <div className="rounded-lg border border-neutral-300 bg-neutral-50 p-6">
-        <p className="font-medium">{state.message}</p>
-        <p className="mt-2 text-sm text-neutral-600">
-          Accounts are approved by hand, so this is not instant.
+      <div className="rounded-lg border border-border bg-background p-6">
+        <p className="font-serif text-lg">{state.message}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Accounts are approved by hand, so this is not instant. You&apos;ll get
+          a link to set a password.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <Field name="fullName" label="Full name" required autoComplete="name" />
-      <Field name="email" label="Email" type="email" required autoComplete="email" />
-      <Field name="firm" label="Firm" />
-      <Field name="jurisdiction" label="Where do you practise?" />
-      <label className="block">
-        <span className="text-sm font-medium">What would you use it for?</span>
-        <textarea
-          name="useCase"
-          rows={3}
-          maxLength={2000}
-          className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-900"
-        />
-      </label>
+    <form onSubmit={onSubmit} className="space-y-5">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="fullName">Full name</Label>
+          <Input id="fullName" name="fullName" required autoComplete="name" maxLength={200} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" name="email" type="email" required autoComplete="email" maxLength={254} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="firm">Firm</Label>
+          <Input id="firm" name="firm" maxLength={200} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="jurisdiction">Where do you practise?</Label>
+          <Input id="jurisdiction" name="jurisdiction" maxLength={120} />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="useCase">What would you use it for?</Label>
+        <Textarea id="useCase" name="useCase" rows={4} maxLength={2000} />
+      </div>
 
       {state.kind === "error" && (
-        <p role="alert" className="text-sm text-red-700">
-          {state.message}
-        </p>
+        <p role="alert" className="text-sm text-destructive">{state.message}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={state.kind === "sending"}
-        className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-      >
+      <Button type="submit" disabled={state.kind === "sending"}>
         {state.kind === "sending" ? "Sending…" : "Request access"}
-      </button>
+      </Button>
     </form>
-  );
-}
-
-function Field({
-  name,
-  label,
-  type = "text",
-  required = false,
-  autoComplete,
-}: {
-  name: string;
-  label: string;
-  type?: string;
-  required?: boolean;
-  autoComplete?: string;
-}) {
-  return (
-    <label className="block">
-      <span className="text-sm font-medium">
-        {label}
-        {required && <span aria-hidden className="text-neutral-400"> *</span>}
-      </span>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        autoComplete={autoComplete}
-        maxLength={254}
-        className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-900"
-      />
-    </label>
   );
 }

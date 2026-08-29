@@ -2,9 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 type Result = { sendTo: string; link: string } | { denied: true } | { error: string };
 
+/**
+ * Note on colour: the approval confirmation is neutral, not accent. Oxblood
+ * means caution in this palette — it is what the unverified-citations warning
+ * uses — and a successful approval is not a warning.
+ */
 export function RequestRow(props: {
   id: string;
   email: string;
@@ -29,83 +37,76 @@ export function RequestRow(props: {
     const body = await res.json().catch(() => ({}));
     setBusy(false);
 
-    if (!res.ok) {
-      setResult({ error: body.error ?? "Something went wrong." });
-      return;
-    }
+    if (!res.ok) return setResult({ error: body.error ?? "Something went wrong." });
     if (action === "deny") {
       setResult({ denied: true });
       router.refresh();
       return;
     }
-    // Shown once. The token's hash is stored, not the token, so this exact
-    // string cannot be recovered — but a fresh link can always be issued.
     setResult({ sendTo: body.sendTo, link: body.link });
   }
 
   return (
-    <li className="rounded-lg border border-neutral-300 p-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <p className="font-medium">{props.fullName}</p>
-          <p className="text-sm text-neutral-600">{props.email}</p>
-        </div>
-        <p className="text-xs text-neutral-500">
-          {new Date(props.createdAt).toLocaleString()}
-        </p>
-      </div>
+    <li>
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div>
+              <p className="font-serif text-lg">{props.fullName}</p>
+              <p className="text-sm text-muted-foreground">{props.email}</p>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {new Date(props.createdAt).toLocaleDateString(undefined, {
+                day: "numeric", month: "short", year: "numeric",
+              })}
+            </p>
+          </div>
 
-      {(props.firm || props.jurisdiction) && (
-        <p className="mt-2 text-sm text-neutral-600">
-          {[props.firm, props.jurisdiction].filter(Boolean).join(" · ")}
-        </p>
-      )}
-      {props.useCase && (
-        <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-700">{props.useCase}</p>
-      )}
+          {(props.firm || props.jurisdiction) && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {props.firm && <Badge variant="secondary">{props.firm}</Badge>}
+              {props.jurisdiction && <Badge variant="secondary">{props.jurisdiction}</Badge>}
+            </div>
+          )}
+          {props.useCase && (
+            <p className="prose-legal mt-4 text-sm whitespace-pre-wrap">{props.useCase}</p>
+          )}
 
-      {result && "link" in result ? (
-        <div className="mt-4 rounded-md border border-green-300 bg-green-50 p-4">
-          <p className="text-sm font-medium text-green-900">
-            Approved. Send this link to {result.sendTo}
-          </p>
-          <p className="mt-1 text-xs text-green-800">
-            Valid for 48 hours, usable once. It is shown only now — but you can
-            approve again to issue a fresh one.
-          </p>
-          <code className="mt-3 block overflow-x-auto rounded border border-green-200 bg-white p-2 text-xs">
-            {result.link}
-          </code>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(result.link);
-              setCopied(true);
-            }}
-            className="mt-3 rounded-md bg-green-800 px-3 py-1.5 text-xs font-medium text-white"
-          >
-            {copied ? "Copied" : "Copy link"}
-          </button>
-        </div>
-      ) : result && "denied" in result ? (
-        <p className="mt-4 text-sm text-neutral-600">Denied.</p>
-      ) : result && "error" in result ? (
-        <p role="alert" className="mt-4 text-sm text-red-700">{result.error}</p>
-      ) : (
-        <div className="mt-4 flex gap-2">
-          <button
-            onClick={() => act("approve")} disabled={busy}
-            className="rounded-md bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-          >
-            Approve
-          </button>
-          <button
-            onClick={() => act("deny")} disabled={busy}
-            className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
-          >
-            Deny
-          </button>
-        </div>
-      )}
+          {result && "link" in result ? (
+            <div className="mt-5 rounded-md border border-border bg-secondary p-4">
+              <p className="text-sm font-medium">
+                Approved. Send this link to {result.sendTo}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Valid 48 hours, usable once. Shown only now — approve again to
+                issue a fresh one.
+              </p>
+              <code className="mt-3 block overflow-x-auto rounded border border-border bg-background p-2 text-xs">
+                {result.link}
+              </code>
+              <Button
+                size="sm"
+                className="mt-3"
+                onClick={() => {
+                  navigator.clipboard.writeText(result.link);
+                  setCopied(true);
+                }}
+              >
+                {copied ? "Copied" : "Copy link"}
+              </Button>
+            </div>
+          ) : result && "denied" in result ? (
+            <p className="mt-5 text-sm text-muted-foreground">Denied.</p>
+          ) : result && "error" in result ? (
+            <p role="alert" className="mt-5 text-sm text-destructive">{result.error}</p>
+          ) : (
+            <div className="mt-5 flex gap-2">
+              <Button onClick={() => act("approve")} disabled={busy}>Approve</Button>
+              <Button variant="outline" onClick={() => act("deny")} disabled={busy}>Deny</Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </li>
   );
 }
