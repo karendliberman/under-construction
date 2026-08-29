@@ -18,10 +18,14 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends nodejs npm \
  && rm -rf /var/lib/apt/lists/*
 
+# The source has to be present before pip install, because installing this
+# project means building a wheel for the `agent` package itself. Ordering
+# pyproject.toml first would cache the dependency layer, but only if we
+# installed dependencies WITHOUT the project — not worth a second source of
+# truth for pinned versions. Cost: editing a .py file reinstalls dependencies.
 COPY services/agent/pyproject.toml ./
-RUN pip install --no-cache-dir .
-
 COPY services/agent/agent ./agent
+RUN pip install --no-cache-dir .
 
 # INVARIANT 2, the other half: the worker is the ONLY thing that composes
 # playbooks, so it gets all of them. Compare the web Dockerfile, which copies
