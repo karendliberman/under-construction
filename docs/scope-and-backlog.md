@@ -59,6 +59,14 @@ Nothing user-visible. More setup than the single-service version, because there 
 
 **Milestone:** two deployed services passing a message to each other through the database.
 
+> **Status: done, 29 August 2026.** `uc-web` and `uc-agent` are live on Render
+> against Neon; a row posted to the web service is claimed by the worker and
+> completed in ~3s. Cost is ~$7/month — the worker on starter, the web service
+> on free. Phases 1 and 2 do not touch the worker, so it can be suspended until
+> Phase 3, which is also when it needs a 1 CPU / 2 GB instance for the ~1 GiB
+> per-agent floor. Remaining scaffolding: `pipe_checks` and `/api/pipe`, both
+> to be removed when the real `generations` table lands.
+
 ### Phase 1 — Walls and doors (~3–4 sessions)
 
 | # | Task | Notes |

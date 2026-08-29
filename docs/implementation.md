@@ -56,6 +56,38 @@ One detail that matters: **the worker's image must include all of `playbooks/`**
 
 **CI needs path filters** so a playbook edit rebuilds only the worker, and a CSS change rebuilds only the web app.
 
+### Phase 0, as built (August 2026)
+
+Three things this section did not anticipate, recorded so the next person does
+not rediscover them.
+
+**Verify deploys by building from a clean clone, not the working tree.** Git
+does not track empty directories. `apps/web/public/` existed locally, so the
+local `docker build` copied it and passed; Render clones from git, received no
+such directory, and the `COPY` failed. Every empty directory now holds a
+`.gitkeep`. Before a deploy:
+
+```bash
+git clone . /tmp/clone-test && cd /tmp/clone-test
+docker build --no-cache -f apps/web/Dockerfile -t uc-web:test .
+```
+
+**The worker image installs Node but not the Claude Code CLI.** `claude-agent-sdk`
+drives that CLI, which is a Node program, and `services/agent/Dockerfile`
+installs `nodejs`/`npm` but never `@anthropic-ai/claude-code`. Phase 0 never
+calls the SDK so nothing failed. **This is the first thing §4 must verify**,
+before any playbook work — it is a build-time fix, not a debugging session.
+
+**Actual versions**, since this section names no numbers and the ecosystem
+moved: Next 16, React 19, Tailwind 4 (CSS-first — there is no
+`tailwind.config.ts`), Zod 4, drizzle-orm 0.45, TypeScript 5.9 (not 7.0, whose
+Next type-plugin support is unproven), Node 24 in the image, Python 3.12.
+
+**Sequencing note:** build-order step 1 ("Monorepo layout, both Dockerfiles,
+Neon, Render, env vars") and step 2 ("prove the pipe") were one long session,
+not two. Most of the time went to environment setup and two Dockerfile bugs,
+not to the code.
+
 ---
 
 ## 1. Database schema
