@@ -46,7 +46,14 @@ docker build -f services/agent/Dockerfile -t uc-agent .
 
 ## Where we are
 
-Phase 0 of the backlog. Layout, both Dockerfiles and the "prove the pipe"
-path are in and the web app builds. Neon, Render and the first deploy are not.
+Phase 0 of the backlog.
 
-Next: 0.3 Neon (dev + prod) -> 0.4 Render -> 0.6 prove the pipe in production.
+Done: layout, both Dockerfiles, Neon (dev + prod branches), the first migration,
+and the pipe proven **locally** — the web app writes a queued row, the Python
+worker claims it with `FOR UPDATE SKIP LOCKED` and writes back.
+
+Next: 0.4 Render (both services from render.yaml) -> 0.5 secrets in the Render
+env -> 0.6 the same proof, in production.
+
+Local dev uses the Neon `dev` branch; production gets its own connection string
+set directly in Render.
