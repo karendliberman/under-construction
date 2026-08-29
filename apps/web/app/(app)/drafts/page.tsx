@@ -20,9 +20,12 @@ export default async function DraftsPage() {
 
       <div className="mt-10 rounded-lg border border-dashed border-neutral-300 p-10 text-center">
         <p className="text-neutral-500">No drafts yet.</p>
-        <p className="mt-1 text-sm text-neutral-400">
-          Drafting arrives in Phase 3.
-        </p>
+        <a
+          href="/drafts/new"
+          className="mt-4 inline-block rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
+        >
+          New draft
+        </a>
       </div>
 
       {user?.role === "admin" && (

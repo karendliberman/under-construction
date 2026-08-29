@@ -21,6 +21,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install ./services/agent
+      - run: pip install "./services/agent[dev]"
       - name: Import check
         run: python -c "import agent.loop; print('worker imports cleanly')"
+      - name: Resolver tests
+        # Guards invariant 6. If resolve_playbook stops being deterministic,
+        # generations.playbook_version silently stops meaning anything.
+        run: python -m pytest services/agent/tests -q

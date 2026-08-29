@@ -2,25 +2,28 @@
 # Labels and filenames — never prose.
 #
 # Adding a cause of action is two files and an entry here.
+#
+# Layer order is fixed in code (playbooks.py), not here: shared guardrails
+# frame everything, then the general procedural standard, then the specific
+# cause of action, then the jurisdictional gloss last so local practice
+# overrides general guidance.
+
+shared:
+  - _shared/guardrails.md
+  - _shared/house-style.md
 
 causes_of_action:
-  - id: breach-of-contract
-    label: Breach of Contract
+  breach-of-contract:
+    label: "Breach of Contract"
+    procedural: procedural/rule-12b6-federal.md
+    substantive: causes-of-action/breach-of-contract.md
+    jurisdictions: [sdny]
+
+  fraud:
+    label: "Fraud"
+    procedural: procedural/rule-12b6-federal.md
+    substantive: causes-of-action/fraud.md
+    jurisdictions: [sdny]
 
 jurisdictions:
-  - id: sdny
-    label: S.D.N.Y.
-
-# Which combinations actually have a playbook. The picker greys out the rest.
-# Layers compose in this fixed order: shared -> procedural -> substantive ->
-# jurisdictional. Fixed ordering is what makes resolve_playbook deterministic
-# (invariant 6), which is what lets us store only a git SHA (invariant 5).
-combinations:
-  - cause_of_action: breach-of-contract
-    jurisdiction: sdny
-    layers:
-      - _shared/guardrails.md
-      - _shared/house-style.md
-      - procedural/rule-12b6-federal.md
-      - causes-of-action/breach-of-contract.md
-      - jurisdictions/sdny.md
+  sdny: { label: "S.D.N.Y.", file: jurisdictions/sdny.md }
