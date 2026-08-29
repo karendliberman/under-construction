@@ -55,16 +55,34 @@ through Neon Postgres, with the database as the only interface between them.
 Verified in production: a row posted to the web service is claimed by the
 worker with `FOR UPDATE SKIP LOCKED` and completed in ~3 seconds.
 
-Phase 1 in progress. Done: the public marketing page and the request-access
-flow (1.1, 1.5), with `users` and `access_requests` tables.
+**Phases 0, 1 and 2 complete.**
 
-Next: login and session cookie (1.3), middleware gating `/drafts/*`,
-`/admin/*` and `/api/generations/*` (1.4), and the admin approve/deny page
-(1.6, 1.7).
+- Both services deployed, passing messages through Neon
+- Request access, admin approve/deny, set-password link, login, middleware
+  gating. Email is deliberately deferred: approval shows the link for you to
+  send by hand, which has the same security properties as long as it goes to
+  the address on the request.
+- Playbook resolver, preview CLI, and the registry-driven picker
 
-Open question for 1.4: the middleware in implementation guide §2 does a
-database lookup, but Next middleware runs on the Edge runtime by default,
-where `postgres.js` cannot run. Resolve before building the gate.
+Next: **Phase 3**, the agent worker — spend controls first (3.0, before the
+first API call), then `matters`/`generations`, the case-facts form, and the
+Agent SDK call.
+
+### Checking a playbook
+
+The resolver composes shared guardrails, the procedural standard, the cause of
+action, then the jurisdictional gloss last so local practice overrides. To see
+exactly what the worker would use, without calling the model:
+
+```bash
+cd services/agent
+.venv/bin/python -m agent.preview --list
+.venv/bin/python -m agent.preview breach-of-contract sdny
+```
+
+The doctrinal layers in `playbooks/` are **placeholders**. They are Ben's to
+write (backlog 2.3), and until he does, the composed document has structure but
+no legal content.
 
 ### Cost note
 
