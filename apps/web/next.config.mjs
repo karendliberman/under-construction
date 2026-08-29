@@ -6,7 +6,7 @@ const nextConfig = {
   // The repo root, not apps/web — the standalone tracer has to follow imports
   // into packages/db.
   outputFileTracingRoot: new URL("../../", import.meta.url).pathname,
-  experimental: { typedRoutes: true },
+  typedRoutes: true,
 };
 
 export default nextConfig;

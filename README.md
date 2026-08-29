@@ -16,7 +16,7 @@ docs/              The plan
 
 ## Local setup
 
-Requires Node 20+ and Python 3.12.
+Requires Node 20+ (the images build on Node 24 LTS) and Python 3.12.
 
 ```bash
 npm install
@@ -47,4 +47,6 @@ docker build -f services/agent/Dockerfile -t uc-agent .
 ## Where we are
 
 Phase 0 of the backlog. Layout, both Dockerfiles and the "prove the pipe"
-path are in; Neon, Render and the first deploy are not.
+path are in and the web app builds. Neon, Render and the first deploy are not.
+
+Next: 0.3 Neon (dev + prod) -> 0.4 Render -> 0.6 prove the pipe in production.
