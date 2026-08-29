@@ -15,6 +15,13 @@
       "when": 1788031282833,
       "tag": "0001_stiff_darkhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788032125239,
+      "tag": "0002_careless_absorbing_man",
+      "breakpoints": true
     }
   ]
 }

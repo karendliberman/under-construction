@@ -72,3 +72,29 @@ export const users = pgTable("users", {
 
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/**
+ * Single-use, short-lived tokens for setting a password.
+ *
+ * Only the SHA-256 of the token is stored, never the token itself — the same
+ * reasoning as a password hash: a leak of this table must not let anyone take
+ * over an account. SHA-256 rather than bcrypt is right here because the token
+ * is 256 bits of randomness, so there is nothing to brute-force.
+ *
+ * V0 delivers the link by hand (the admin screen shows it). Swapping in an
+ * email sender later needs no change to this table.
+ */
+export const setPasswordTokens = pgTable(
+  "set_password_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    tokenHash: text("token_hash").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("set_password_tokens_user_idx").on(t.userId)],
+);
