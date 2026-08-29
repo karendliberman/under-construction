@@ -8,6 +8,13 @@
       "when": 1788015417789,
       "tag": "0000_pink_franklin_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788031282833,
+      "tag": "0001_stiff_darkhawk",
+      "breakpoints": true
     }
   ]
 }
