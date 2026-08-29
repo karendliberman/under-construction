@@ -55,8 +55,16 @@ through Neon Postgres, with the database as the only interface between them.
 Verified in production: a row posted to the web service is claimed by the
 worker with `FOR UPDATE SKIP LOCKED` and completed in ~3 seconds.
 
-Next: Phase 1 — the marketing page, `users`, login, and middleware gating
-`/drafts/*`, `/admin/*` and `/api/generations/*`.
+Phase 1 in progress. Done: the public marketing page and the request-access
+flow (1.1, 1.5), with `users` and `access_requests` tables.
+
+Next: login and session cookie (1.3), middleware gating `/drafts/*`,
+`/admin/*` and `/api/generations/*` (1.4), and the admin approve/deny page
+(1.6, 1.7).
+
+Open question for 1.4: the middleware in implementation guide §2 does a
+database lookup, but Next middleware runs on the Edge runtime by default,
+where `postgres.js` cannot run. Resolve before building the gate.
 
 ### Cost note
 
