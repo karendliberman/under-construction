@@ -21,7 +21,10 @@ export function AppHeader({
   return (
     <header className="sticky top-0 z-40 flex h-[60px] items-center justify-between bg-[var(--chocolate)] px-6 text-[var(--on-dark)] sm:px-8">
       <div className="flex items-center gap-6 sm:gap-9">
-        <Link href="/drafts" className="flex items-baseline gap-2.5 no-underline">
+        {/* The handoff points the logo at /drafts; going to the marketing page
+            is the more conventional behaviour and the Drafts nav link is right
+            beside it, so nothing is lost. */}
+        <Link href="/" className="flex items-baseline gap-2.5 no-underline">
           <span className="size-2.5 shrink-0 bg-[var(--apricot)]" />
           <span className="hidden font-mono text-[12px] tracking-[0.16em] uppercase sm:inline">
             Under Construction
