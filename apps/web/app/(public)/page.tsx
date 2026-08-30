@@ -5,7 +5,7 @@ export default function Home() {
     <main>
       {/* Hero */}
       <section className="mx-auto max-w-5xl px-6 pt-20 pb-16 sm:pt-28">
-        <p className="text-sm font-medium tracking-wide text-accent-foreground uppercase">
+        <p className="text-sm font-medium tracking-wide text-primary uppercase">
           Motions to dismiss
         </p>
         <h1 className="mt-4 max-w-3xl font-serif text-4xl leading-[1.1] tracking-tight sm:text-5xl">
@@ -24,9 +24,6 @@ export default function Home() {
           >
             Request access
           </a>
-          <span className="text-sm text-muted-foreground">
-            Accounts are approved by hand.
-          </span>
         </div>
       </section>
 
@@ -53,7 +50,7 @@ export default function Home() {
               },
             ].map((s) => (
               <li key={s.n}>
-                <span className="font-serif text-sm text-accent-foreground">{s.n}</span>
+                <span className="font-serif text-sm text-primary">{s.n}</span>
                 <h3 className="mt-2 font-medium">{s.h}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.p}</p>
               </li>
@@ -80,17 +77,17 @@ export default function Home() {
               need one that shows its seams.
             </p>
           </div>
-          <div className="rounded-lg border border-accent bg-accent/40 p-6">
+          <div className="rounded-lg border border-accent bg-accent p-6">
             <h3 className="font-medium text-accent-foreground">
               Citations are not verified
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-accent-foreground/90">
+            <p className="mt-3 text-sm leading-relaxed text-accent-foreground">
               This is stated plainly because it matters: the draft may cite cases
               that do not exist or do not say what it claims. There is no
               retrieval layer and no citation checker yet. Every citation must be
               checked before anything is filed.
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-accent-foreground/90">
+            <p className="mt-3 text-sm leading-relaxed text-accent-foreground">
               We would rather lose your interest here than have you find out
               from a judge.
             </p>

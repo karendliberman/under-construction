@@ -39,8 +39,7 @@ export function RequestAccessForm() {
       <div className="rounded-lg border border-border bg-background p-6">
         <p className="font-serif text-lg">{state.message}</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Accounts are approved by hand, so this is not instant. You&apos;ll get
-          a link to set a password.
+          We&apos;ll review this and send you a link to set a password.
         </p>
       </div>
     );
