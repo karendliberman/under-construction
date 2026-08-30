@@ -5,7 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+    --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+    --font-mono: var(--font-plex-mono), ui-monospace, monospace;
     --font-heading: var(--font-serif);
     --font-sans: var(--font-sans);
     --color-sidebar-ring: var(--sidebar-ring);
@@ -49,103 +50,74 @@
 }
 
 :root {
-    /* Palette from three named colours:
-         Chocolate Fondant  #3C2A22  oklch(0.304 0.030 45)   — text, ink
-         Apricot Illusion   #EFC3AC  oklch(0.850 0.059 49)   — accent fills
-         Dress Blues        #2F3A4F  oklch(0.348 0.040 263)  — primary actions
-       Apricot is a FILL, never text: it is light by nature, so it carries
-       chocolate on top (8.45:1) rather than being set on paper itself. */
+    /* ── Design handoff tokens ────────────────────────────────────────────
+       Named exactly as the handoff names them, so the spec and the code use
+       one vocabulary. Everything below maps onto these. */
+    --plum: #8E4B57;
+    --plum-hover: #743C46;
+    --chocolate: #3C2A22;
+    --blue: #2F3A4F;
+    --apricot: #EFC3AC;
+    --apricot-wash: #F7E7DC;
+    --paper: #FCFBFA;
+    --surface: #FFFFFF;
+    --input-fill: #F7F5F2;
+    --hairline: #E5E2DD;
+    --hairline-warm: #E4D6CB;
+    --text-secondary: #6C5B52;
+    --text-muted: #8A7A70;
+    --text-faint: #A89A90;
+    --on-dark: #F6F3EE;
+    --on-plum: #FBF6F2;
+    --mark-grey: #A89A90;
 
-    /* Paper, warmed toward the apricot hue so the family reads as one. */
-    --background: oklch(0.986 0.008 55);
-    --foreground: oklch(0.304 0.030 45);
+    /* ── shadcn roles, mapped onto the above ─────────────────────────── */
+    --background: var(--paper);
+    --foreground: var(--chocolate);
+    --card: var(--surface);
+    --card-foreground: var(--chocolate);
+    --popover: var(--surface);
+    --popover-foreground: var(--chocolate);
 
-    --card: oklch(0.997 0.003 55);
-    --card-foreground: oklch(0.304 0.030 45);
-    --popover: oklch(0.997 0.003 55);
-    --popover-foreground: oklch(0.304 0.030 45);
+    --primary: var(--plum);
+    --primary-foreground: var(--on-plum);
 
-    /* Dress Blues. White on this is 11.42:1. */
-    --primary: oklch(0.348 0.040 263);
-    --primary-foreground: oklch(0.985 0.006 55);
+    --secondary: var(--apricot-wash);
+    --secondary-foreground: var(--chocolate);
+    --muted: var(--input-fill);
+    --muted-foreground: var(--text-secondary);
 
-    --secondary: oklch(0.955 0.014 52);
-    --secondary-foreground: oklch(0.304 0.030 45);
-    --muted: oklch(0.958 0.012 52);
-    --muted-foreground: oklch(0.505 0.026 45);
+    --accent: var(--apricot);
+    --accent-foreground: var(--chocolate);
 
-    /* Apricot Illusion, as a fill with chocolate text on it. */
-    --accent: oklch(0.850 0.059 49);
-    --accent-foreground: oklch(0.285 0.032 45);
+    --destructive: var(--plum);
 
-    /* Kept in the warm family rather than a generic alarm red. */
-    --destructive: oklch(0.505 0.155 30);
+    --border: var(--hairline);
+    --input: var(--hairline);
+    --ring: var(--plum);
 
-    --border: oklch(0.885 0.014 50);
-    --input: oklch(0.875 0.016 50);
-    --ring: oklch(0.348 0.040 263);
+    --chart-1: var(--plum);
+    --chart-2: var(--blue);
+    --chart-3: var(--apricot);
+    --chart-4: var(--chocolate);
+    --chart-5: var(--text-muted);
 
-    --chart-1: oklch(0.348 0.040 263);
-    --chart-2: oklch(0.850 0.059 49);
-    --chart-3: oklch(0.304 0.030 45);
-    --chart-4: oklch(0.620 0.090 45);
-    --chart-5: oklch(0.520 0.045 263);
+    /* Square corners everywhere — a deliberate rule of this design. */
+    --radius: 0rem;
 
-    --radius: 0.375rem;
-
-    --sidebar: oklch(0.970 0.012 52);
-    --sidebar-foreground: oklch(0.304 0.030 45);
-    --sidebar-primary: oklch(0.348 0.040 263);
-    --sidebar-primary-foreground: oklch(0.985 0.006 55);
-    --sidebar-accent: oklch(0.850 0.059 49);
-    --sidebar-accent-foreground: oklch(0.285 0.032 45);
-    --sidebar-border: oklch(0.885 0.014 50);
-    --sidebar-ring: oklch(0.348 0.040 263);
+    --sidebar: var(--chocolate);
+    --sidebar-foreground: var(--on-dark);
+    --sidebar-primary: var(--apricot);
+    --sidebar-primary-foreground: var(--chocolate);
+    --sidebar-accent: var(--apricot);
+    --sidebar-accent-foreground: var(--chocolate);
+    --sidebar-border: rgba(246, 243, 238, 0.35);
+    --sidebar-ring: var(--apricot);
 }
 
 .dark {
-    /* Dormant: there is no toggle and no prefers-color-scheme rule yet, so
-       nothing renders these. Kept coherent so switching it on is a small job.
-       Roles invert: Dress Blues becomes the ground, apricot the highlight. */
-    --background: oklch(0.215 0.026 263);
-    --foreground: oklch(0.935 0.012 55);
-
-    --card: oklch(0.255 0.026 263);
-    --card-foreground: oklch(0.935 0.012 55);
-    --popover: oklch(0.255 0.026 263);
-    --popover-foreground: oklch(0.935 0.012 55);
-
-    --primary: oklch(0.850 0.059 49);
-    --primary-foreground: oklch(0.255 0.030 45);
-
-    --secondary: oklch(0.300 0.026 263);
-    --secondary-foreground: oklch(0.935 0.012 55);
-    --muted: oklch(0.300 0.026 263);
-    --muted-foreground: oklch(0.720 0.020 55);
-
-    --accent: oklch(0.360 0.045 45);
-    --accent-foreground: oklch(0.880 0.055 49);
-
-    --destructive: oklch(0.640 0.150 30);
-
-    --border: oklch(1 0 0 / 14%);
-    --input: oklch(1 0 0 / 18%);
-    --ring: oklch(0.850 0.059 49);
-
-    --chart-1: oklch(0.850 0.059 49);
-    --chart-2: oklch(0.650 0.060 263);
-    --chart-3: oklch(0.760 0.040 45);
-    --chart-4: oklch(0.620 0.090 45);
-    --chart-5: oklch(0.520 0.045 263);
-
-    --sidebar: oklch(0.255 0.026 263);
-    --sidebar-foreground: oklch(0.935 0.012 55);
-    --sidebar-primary: oklch(0.850 0.059 49);
-    --sidebar-primary-foreground: oklch(0.255 0.030 45);
-    --sidebar-accent: oklch(0.360 0.045 45);
-    --sidebar-accent-foreground: oklch(0.880 0.055 49);
-    --sidebar-border: oklch(1 0 0 / 14%);
-    --sidebar-ring: oklch(0.850 0.059 49);
+    /* The handoff has no dark variant. Dark surfaces here are deliberate and
+       local — the top bar, the footer, one marketing band — not a theme. */
 }
 
 @layer base {
@@ -165,5 +137,133 @@
   .prose-legal {
     max-width: 68ch;
     line-height: 1.7;
+  }
+}
+
+@layer base {
+  .prose-legal {
+    max-width: 68ch;
+    line-height: 1.7;
+  }
+
+  /* Mono labels: the handoff uses these constantly for metadata, counters and
+     eyebrows. Uppercase, wide tracking, small. */
+  .mono-label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+
+  /* Offset hard shadows, never blurred. Grows and lifts on hover. */
+  .shadow-offset {
+    box-shadow: 5px 5px 0 var(--apricot);
+    transition: box-shadow 0.18s, transform 0.18s, background-color 0.18s;
+  }
+  .shadow-offset:hover:not(:disabled) {
+    box-shadow: 8px 8px 0 var(--apricot);
+    transform: translate(-2px, -2px);
+  }
+  .shadow-offset-dark {
+    box-shadow: 6px 6px 0 rgba(60, 42, 34, 0.16);
+    transition: box-shadow 0.18s, transform 0.18s, background-color 0.18s;
+  }
+  .shadow-offset-dark:hover:not(:disabled) {
+    box-shadow: 10px 10px 0 rgba(60, 42, 34, 0.16);
+    transform: translate(-2px, -2px);
+  }
+
+  @keyframes ucRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes ucPulse { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+  .uc-rise { animation: ucRise .5s cubic-bezier(.2,.7,.3,1) both; }
+  .uc-pulse { animation: ucPulse 1.6s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .uc-rise, .uc-pulse { animation: none; }
+    .shadow-offset:hover, .shadow-offset-dark:hover { transform: none; }
+  }
+
+  ::selection { background: var(--apricot); color: var(--chocolate); }
+}
+
+@layer components {
+  /* Mono uppercase label sitting above each field. */
+  .uc-label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* Inputs read as filled wells inside white cards, and go white on focus
+     with a plum border. Square, like everything else. */
+  .uc-input {
+    width: 100%;
+    background: var(--input-fill);
+    border: 1px solid var(--hairline);
+    padding: 13px 15px;
+    font-size: 15px;
+    color: var(--chocolate);
+    outline: none;
+    transition: border-color .18s, background-color .18s;
+  }
+  .uc-input:focus {
+    border-color: var(--plum);
+    background: var(--surface);
+  }
+  .uc-input::placeholder { color: var(--text-faint); }
+  .uc-input:disabled { opacity: .55; cursor: not-allowed; }
+
+  /* Primary action: plum, square, apricot offset shadow. */
+  .uc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--plum);
+    color: var(--on-plum);
+    border: 1px solid var(--plum);
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 5px 5px 0 var(--apricot);
+    transition: background-color .18s, box-shadow .18s, transform .18s;
+  }
+  .uc-btn:hover:not(:disabled) {
+    background: var(--plum-hover);
+    box-shadow: 8px 8px 0 var(--apricot);
+    transform: translate(-2px, -2px);
+  }
+  .uc-btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+
+  /* Ghost: outline that fills chocolate on hover. */
+  .uc-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--chocolate);
+    border: 1px solid var(--hairline);
+    padding: 13px 26px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .uc-btn-ghost:hover:not(:disabled) {
+    border-color: var(--chocolate);
+    background: var(--chocolate);
+    color: var(--on-dark);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .uc-btn:hover:not(:disabled) { transform: none; }
   }
 }

@@ -12,23 +12,29 @@ export default async function AdminRequestsPage() {
     .orderBy(desc(accessRequests.createdAt));
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-serif text-3xl tracking-tight">Access requests</h1>
-      <p className="prose-legal mt-2 text-sm text-muted-foreground">
-        Approving creates the account and produces a set-password link. Send it
-        to the address shown — sending it there is what makes the link
-        meaningful, so don&apos;t send it anywhere else.
+    <main className="mx-auto max-w-[1180px] px-6 pt-12 pb-20 sm:px-8 sm:pt-[52px]">
+      <p className="font-mono text-[11px] tracking-[0.16em] text-[var(--plum)] uppercase">
+        Admin
       </p>
 
+      <div className="mt-3 flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="font-serif text-[clamp(2.25rem,6vw,52px)] leading-tight tracking-[-0.01em]">
+          Access requests
+        </h1>
+        <span className="font-mono text-[11.5px] tracking-[0.14em] text-[var(--text-muted)] uppercase">
+          {pending.length} pending
+        </span>
+      </div>
+
       {pending.length === 0 ? (
-        <div className="mt-10 rounded-lg border border-dashed border-border p-16 text-center">
-          <p className="font-serif text-lg">Nothing pending</p>
-          <p className="mt-2 text-sm text-muted-foreground">
+        <div className="mt-12 border border-dashed border-[#CBBFB4] bg-[var(--surface)] px-6 py-20 text-center">
+          <h2 className="font-serif text-[32px] leading-tight">Nothing pending</h2>
+          <p className="mt-3 text-[16px] text-[var(--text-secondary)]">
             New requests from the public page appear here.
           </p>
         </div>
       ) : (
-        <ul className="mt-8 space-y-4">
+        <ul className="mt-10 border-t border-[var(--chocolate)]">
           {pending.map((r) => (
             <RequestRow
               key={r.id}

@@ -1,28 +1,24 @@
-import Link from "next/link";
 import { causesOfAction, jurisdictions } from "@/lib/registry";
+import { StepRail } from "@/components/step-rail";
 import { Picker } from "./picker";
 
 export const dynamic = "force-dynamic";
 
 export default function NewDraftPage() {
-  // Labels and ids only. No playbook prose crosses this boundary — it isn't
-  // even in this container's image.
+  // Labels and ids only — playbook prose is not in this container's image.
   return (
-    <main className="mx-auto max-w-2xl px-6 py-12">
-      <Link
-        href="/drafts"
-        className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-      >
-        ← Drafts
-      </Link>
+    <main className="mx-auto max-w-[940px] px-6 pt-12 pb-20 sm:px-8 sm:pt-[52px]">
+      <StepRail current={1} />
 
-      <h1 className="mt-6 font-serif text-3xl tracking-tight">New draft</h1>
-      <p className="mt-2 text-muted-foreground">
-        Every pairing below has its own playbook. Options come from the registry,
-        so adding one is a file and an entry.
+      <h1 className="mt-7 font-serif text-[clamp(2.25rem,6vw,52px)] leading-tight tracking-[-0.01em]">
+        Pick the combination
+      </h1>
+      <p className="mt-3 max-w-[620px] text-[16px] leading-[1.7] text-[var(--text-secondary)] text-pretty">
+        Only pairings with a written playbook are offered. The playbook decides
+        the structure of the motion, not a generic template.
       </p>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <Picker causes={causesOfAction()} jurisdictions={jurisdictions()} />
       </div>
     </main>

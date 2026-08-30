@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Wordmark } from "@/components/wordmark";
+import { AuthPanel } from "@/components/auth-panel";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,10 +12,15 @@ export default function LoginPage() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const data = Object.fromEntries(new FormData(event.currentTarget));
+
+    if (!data.email || !data.password) {
+      setError("Email and password are both required");
+      return;
+    }
     setBusy(true);
     setError(null);
 
-    const data = Object.fromEntries(new FormData(event.currentTarget));
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -36,31 +38,43 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6 py-16">
-      <div className="w-full max-w-sm">
-        <Link href="/" className="hover:opacity-70">
-          <Wordmark />
-        </Link>
-        <h1 className="mt-8 font-serif text-2xl tracking-tight">Sign in</h1>
+    <main className="grid min-h-screen lg:grid-cols-[.9fr_1.1fr]">
+      <AuthPanel />
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" required autoComplete="email" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" required autoComplete="current-password" />
-          </div>
-          {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" className="w-full" disabled={busy}>
-            {busy ? "Signing in…" : "Sign in"}
-          </Button>
-        </form>
+      <div className="flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-[420px]">
+          <h1 className="font-serif text-[44px] leading-tight tracking-[-0.01em]">
+            Sign in
+          </h1>
+          <p className="mt-3 text-[15px] text-[var(--text-secondary)]">
+            <Link href="/">Request it here</Link> if you don&apos;t have an account.
+          </p>
 
-        <p className="mt-6 text-sm text-muted-foreground">
-          Forgotten your password? Email Karen — there is no self-serve reset yet.
-        </p>
+          <form onSubmit={onSubmit} className="mt-9 space-y-5">
+            <div>
+              <label className="uc-label" htmlFor="email">Email</label>
+              <input id="email" name="email" type="email" autoComplete="email" className="uc-input" />
+            </div>
+            <div>
+              <label className="uc-label" htmlFor="password">Password</label>
+              <input id="password" name="password" type="password" autoComplete="current-password" className="uc-input" />
+            </div>
+
+            {error && (
+              <p role="alert" className="font-mono text-[11.5px] tracking-[0.14em] text-[var(--plum)] uppercase">
+                {error}
+              </p>
+            )}
+
+            <button type="submit" className="uc-btn w-full" disabled={busy}>
+              {busy ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
+
+          <p className="mt-8 font-mono text-[11px] tracking-[0.14em] text-[var(--text-faint)] uppercase">
+            Forgot password? Email Karen — no self-serve reset yet.
+          </p>
+        </div>
       </div>
     </main>
   );

@@ -1,30 +1,48 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Geist, Source_Serif_4 } from "next/font/google";
+import { Instrument_Serif, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-// Sans for interface, serif for anything that reads as a document. next/font
-// self-hosts both, so there is no third-party request at runtime.
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const sourceSerif = Source_Serif_4({
+// Per the design handoff: Instrument Serif for display, IBM Plex Sans for UI,
+// IBM Plex Mono for labels, metadata and anything that reads as data.
+// next/font self-hosts all three, so there is no runtime request to Google.
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-source-serif",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+const plexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
+});
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Under Construction — drafting for litigators",
+  title: "Under Construction — it writes the motion",
   description:
-    "Pick a cause of action and a jurisdiction, enter the facts, and get a first draft of a motion to dismiss, written against a playbook for that combination.",
+    "Pick a cause of action and a jurisdiction, enter the facts, and get a complete motion to dismiss argued against a playbook built for that pairing.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable, sourceSerif.variable)}>
+    <html
+      lang="en"
+      className={cn(
+        "font-sans",
+        plexSans.variable,
+        instrumentSerif.variable,
+        plexMono.variable,
+      )}
+    >
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
       </body>

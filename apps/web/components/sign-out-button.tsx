@@ -11,7 +11,7 @@ export function SignOutButton() {
         router.push("/login");
         router.refresh();
       }}
-      className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+      className="font-mono text-[10.5px] tracking-[0.14em] text-[rgba(246,243,238,.6)] uppercase transition-colors hover:text-[var(--apricot)]"
     >
       Sign out
     </button>

@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 
-type State = { kind: "idle" | "sending" } | { kind: "done" | "error"; message: string };
+type State = { kind: "idle" | "sending" } | { kind: "done" } | { kind: "error"; message: string };
+
+const FIELDS = [
+  { name: "fullName", label: "Full name", required: true, autoComplete: "name" },
+  { name: "email", label: "Work email", required: true, type: "email", autoComplete: "email" },
+  { name: "firm", label: "Firm" },
+  { name: "jurisdiction", label: "Where do you practise?" },
+] as const;
 
 export function RequestAccessForm() {
   const [state, setState] = useState<State>({ kind: "idle" });
@@ -22,62 +25,73 @@ export function RequestAccessForm() {
       body: JSON.stringify(data),
     }).catch(() => null);
 
-    if (!res) {
-      setState({ kind: "error", message: "Network error. Please try again." });
-      return;
-    }
+    if (!res) return setState({ kind: "error", message: "Network error. Please try again." });
+    if (res.ok) return setState({ kind: "done" });
+
     const body = await res.json().catch(() => ({}));
-    setState(
-      res.ok
-        ? { kind: "done", message: body.message ?? "Thanks — we'll be in touch." }
-        : { kind: "error", message: body.error ?? "Something went wrong." },
-    );
+    setState({ kind: "error", message: body.error ?? "Something went wrong." });
   }
 
   if (state.kind === "done") {
     return (
-      <div className="rounded-lg border border-border bg-background p-6">
-        <p className="font-serif text-lg">{state.message}</p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We&apos;ll review this and send you a link to set a password.
+      <div className="uc-rise bg-[var(--apricot-wash)] p-8">
+        <h3 className="font-serif text-[32px] leading-tight">Request received.</h3>
+        <p className="mt-4 text-[16px] leading-[1.7] text-[var(--text-secondary)]">
+          An admin reviews it by hand. If you&apos;re approved you&apos;ll get a
+          single-use link to set a password.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="fullName">Full name</Label>
-          <Input id="fullName" name="fullName" required autoComplete="name" maxLength={200} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" maxLength={254} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="firm">Firm</Label>
-          <Input id="firm" name="firm" maxLength={200} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="jurisdiction">Where do you practise?</Label>
-          <Input id="jurisdiction" name="jurisdiction" maxLength={120} />
-        </div>
+    <form onSubmit={onSubmit}>
+      <div className="grid gap-6 sm:grid-cols-2">
+        {FIELDS.map((f) => (
+          <div key={f.name}>
+            <label className="uc-label" htmlFor={f.name}>
+              {f.label}
+            </label>
+            <input
+              id={f.name}
+              name={f.name}
+              type={"type" in f ? f.type : "text"}
+              required={"required" in f ? f.required : false}
+              autoComplete={"autoComplete" in f ? f.autoComplete : undefined}
+              maxLength={254}
+              className="uc-input"
+            />
+          </div>
+        ))}
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="useCase">What would you use it for?</Label>
-        <Textarea id="useCase" name="useCase" rows={4} maxLength={2000} />
+      <div className="mt-6">
+        <label className="uc-label" htmlFor="useCase">
+          What would you use it for?
+        </label>
+        <textarea
+          id="useCase"
+          name="useCase"
+          rows={4}
+          maxLength={2000}
+          className="uc-input resize-y"
+        />
       </div>
 
       {state.kind === "error" && (
-        <p role="alert" className="text-sm text-destructive">{state.message}</p>
+        <p role="alert" className="mt-4 font-mono text-[11.5px] tracking-[0.14em] text-[var(--plum)] uppercase">
+          {state.message}
+        </p>
       )}
 
-      <Button type="submit" disabled={state.kind === "sending"}>
-        {state.kind === "sending" ? "Sending…" : "Request access"}
-      </Button>
+      <div className="mt-7 flex flex-wrap items-center gap-5">
+        <button type="submit" className="uc-btn" disabled={state.kind === "sending"}>
+          {state.kind === "sending" ? "Sending…" : "Send request"}
+        </button>
+        <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--text-faint)] uppercase">
+          A person reads every request
+        </span>
+      </div>
     </form>
   );
 }

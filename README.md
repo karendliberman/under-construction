@@ -68,6 +68,20 @@ Next: **Phase 3**, the agent worker — spend controls first (3.0, before the
 first API call), then `matters`/`generations`, the case-facts form, and the
 Agent SDK call.
 
+### Design
+
+`design_handoff_under_construction/` holds the design reference — a
+high-fidelity HTML prototype of all ten screens plus a README with the tokens.
+It is a reference, not code to copy: `support.js` is a prototype runtime and
+the bottom "Screens" index bar is a prototype affordance. Neither ships, and
+the directory is excluded from both images.
+
+Six of the ten screens are built. The four that are not — case facts,
+generating, draft viewer, failed — arrive with Phase 3.
+
+Two deliberate rules from the handoff: **no border radius anywhere**, and
+**offset hard shadows** rather than blurred ones.
+
 ### Checking a playbook
 
 The resolver composes shared guardrails, the procedural standard, the cause of

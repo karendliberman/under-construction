@@ -10,3 +10,7 @@ evals
 .env
 .env.*
 !.env.example
+
+# Design reference, not shipped. support.js is a prototype runtime and is
+# explicitly not to be ported.
+design_handoff_under_construction
