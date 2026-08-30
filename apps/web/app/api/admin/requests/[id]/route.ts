@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { db, accessRequests, users } from "@uc/db";
 import { currentUser, issueSetPasswordToken } from "@/lib/auth";
+import { appOrigin } from "@/lib/app-url";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +68,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   // Returned once, for you to send to the address below. Only its hash is stored.
   const token = await issueSetPasswordToken(userId);
-  const origin = new URL(request.url).origin;
+  const origin = appOrigin(request);
 
   return NextResponse.json({
     ok: true,

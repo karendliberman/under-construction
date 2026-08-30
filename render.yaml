@@ -24,6 +24,12 @@ services:
         - playbooks/registry.yaml
         - package.json
     envVars:
+      # The public origin, used to build set-password links. Without this the
+      # app can only guess from proxy headers, and request.url gives the
+      # container's internal bind address (0.0.0.0:10000) — which produced
+      # unreachable links for real users.
+      - key: APP_URL
+        value: https://uc-web.onrender.com
       - key: DATABASE_URL
         sync: false
       - key: SESSION_SECRET
