@@ -13,10 +13,14 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# The Claude Agent SDK drives the Claude Code CLI, which is a Node program.
-RUN apt-get update \
- && apt-get install -y --no-install-recommends nodejs npm \
- && rm -rf /var/lib/apt/lists/*
+# No Node here on purpose. claude-agent-sdk ships the Claude Code CLI as a
+# BUNDLED NATIVE EXECUTABLE (claude_agent_sdk/_bundled/claude), and the wheel
+# is platform-specific, so pip installs the Linux build inside this image.
+# SubprocessCLITransport._find_cli() checks that bundled path before falling
+# back to `shutil.which("claude")`, so nothing needs to be on PATH and there is
+# no Node program to run. An earlier version of this file installed nodejs and
+# npm on the assumption that the CLI was a Node script; it is not, and that was
+# roughly 300MB of image for nothing.
 
 # The source has to be present before pip install, because installing this
 # project means building a wheel for the `agent` package itself. Ordering

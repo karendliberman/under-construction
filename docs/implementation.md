@@ -72,11 +72,19 @@ git clone . /tmp/clone-test && cd /tmp/clone-test
 docker build --no-cache -f apps/web/Dockerfile -t uc-web:test .
 ```
 
-**The worker image installs Node but not the Claude Code CLI.** `claude-agent-sdk`
-drives that CLI, which is a Node program, and `services/agent/Dockerfile`
-installs `nodejs`/`npm` but never `@anthropic-ai/claude-code`. Phase 0 never
-calls the SDK so nothing failed. **This is the first thing §4 must verify**,
-before any playbook work — it is a build-time fix, not a debugging session.
+**The worker image needs no Node and no separate CLI install.** An earlier
+revision of this section claimed the opposite; it was wrong, and the Dockerfile
+carried ~300MB of `nodejs`/`npm` because of it.
+
+`claude-agent-sdk` ships the Claude Code CLI as a **bundled native
+executable** at `claude_agent_sdk/_bundled/claude`, and the wheel is
+platform-specific, so pip installs the Linux build inside the image.
+`SubprocessCLITransport._find_cli()` checks that bundled path before falling
+back to `shutil.which("claude")`, so nothing needs to be on `PATH`.
+
+Verified inside the built image: the binary is ELF, ~214MB, reports
+`2.1.251 (Claude Code)`, and the SDK's own resolver returns its path. Removing
+Node took the worker image from 1.02GB to 609MB.
 
 **Actual versions**, since this section names no numbers and the ecosystem
 moved: Next 16, React 19, Tailwind 4 (CSS-first — there is no
