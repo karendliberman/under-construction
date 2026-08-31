@@ -8,7 +8,7 @@ const FIELDS = [
   { name: "fullName", label: "Full name", required: true, autoComplete: "name" },
   { name: "email", label: "Work email", required: true, type: "email", autoComplete: "email" },
   { name: "firm", label: "Firm" },
-  { name: "jurisdiction", label: "Where do you practise?" },
+  { name: "jurisdiction", label: "Where do you practice?" },
 ] as const;
 
 export function RequestAccessForm() {
@@ -37,8 +37,7 @@ export function RequestAccessForm() {
       <div className="uc-rise bg-[var(--apricot-wash)] p-8">
         <h3 className="font-serif text-[32px] leading-tight">Request received.</h3>
         <p className="mt-4 text-[16px] leading-[1.7] text-[var(--text-secondary)]">
-          An admin reviews it by hand. If you&apos;re approved you&apos;ll get a
-          single-use link to set a password.
+          We&apos;ll be in touch with a link to set up your account.
         </p>
       </div>
     );
@@ -67,7 +66,7 @@ export function RequestAccessForm() {
 
       <div className="mt-6">
         <label className="uc-label" htmlFor="useCase">
-          What would you use it for?
+          Which causes of action and courts do you need?
         </label>
         <textarea
           id="useCase"
@@ -89,7 +88,7 @@ export function RequestAccessForm() {
           {state.kind === "sending" ? "Sending…" : "Send request"}
         </button>
         <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--text-faint)] uppercase">
-          A person reads every request
+          We add playbooks by request
         </span>
       </div>
     </form>

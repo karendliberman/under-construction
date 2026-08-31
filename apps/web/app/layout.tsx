@@ -27,9 +27,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Under Construction — it writes the motion",
+  title: "Under Construction — filed-ready motions to dismiss",
   description:
-    "Pick a cause of action and a jurisdiction, enter the facts, and get a complete motion to dismiss argued against a playbook built for that pairing.",
+    "Upload the complaint and get back a complete motion to dismiss, built with a playbook written for that cause of action and court — at a fraction of outside counsel.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

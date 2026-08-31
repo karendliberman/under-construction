@@ -25,8 +25,7 @@ export function AuthPanel() {
       </div>
 
       <div className="space-y-1.5 font-mono text-[11px] tracking-[0.14em] text-[var(--text-muted)] uppercase">
-        <p>Access is approved by hand.</p>
-        <p>Citations are not verified.</p>
+        <p>Motions to dismiss · playbook-driven</p>
       </div>
     </div>
   );
