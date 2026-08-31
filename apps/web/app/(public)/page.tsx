@@ -5,17 +5,17 @@ const STEPS = [
   {
     n: "01",
     h: "Pick the combination",
-    p: "Cause of action and court. Only pairings with a written playbook appear — the procedural standard, the elements, and how that bench actually handles them.",
+    p: "Cause of action and court. You only see pairings that have a playbook behind them: the standard, the elements worth attacking, and how that court handles them.",
   },
   {
     n: "02",
     h: "Upload the complaint",
-    p: "Add the posture, who you represent, and any strategy you want the argument to take — including how hard to push, from measured to aggressive. No need to supply the surrounding law.",
+    p: "Add the posture, who you represent, and any strategy you want. You can set how hard the argument pushes, from measured to aggressive. You do not need to supply the law.",
   },
   {
     n: "03",
     h: "Send it",
-    p: "A complete motion — caption, standard, argument and prayer — formatted and ready to go out. One click into Word.",
+    p: "A complete motion with caption, standard, argument and prayer. Formatted, ready to go out, one click into Word.",
   },
 ];
 
@@ -32,14 +32,13 @@ export default function Home() {
             <h1 className="mt-5 font-serif text-[clamp(3rem,8vw,94px)] leading-[.95] tracking-[-0.02em] text-balance">
               Send the complaint.
               <br />
-              <span className="text-[var(--plum)] italic">Get back a filed-ready motion.</span>
+              <span className="text-[var(--plum)] italic">Get back a file-ready motion.</span>
             </h1>
             <p className="mt-6 max-w-[560px] text-[19px] leading-[1.6] text-[var(--text-secondary)] text-pretty">
-              Upload the complaint, add a few details about the matter, and a
-              few minutes later there is a complete motion to dismiss on the
-              page — built with a playbook written for that exact cause of
-              action and court. The same document outside counsel bills you
-              thousands for, at a fraction of the cost.
+              Upload the complaint and add a few details about the matter. A
+              few minutes later you have a complete motion to dismiss, built
+              with a playbook written for that cause of action in that court.
+              It is the same document outside counsel bills you thousands for.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-6">
               <a
@@ -95,19 +94,19 @@ export default function Home() {
               Better than the brief you&apos;re paying for.
             </h2>
             <p className="mt-6 text-[17px] leading-[1.75] text-[rgba(246,243,238,.8)] text-pretty">
-              The playbooks are written by federal clerks who read motions to
-              dismiss every day — the people who see which arguments land on
-              this bench and which ones get denied. That judgment is encoded
-              once and applied to every matter, consistently.
+              Federal clerks write the playbooks. They read these motions
+              every day and know which arguments land in front of a given
+              judge and which ones get denied. Every draft you get has that
+              judgment in it.
             </p>
             <p className="mt-5 text-[17px] leading-[1.75] text-[rgba(246,243,238,.8)] text-pretty">
-              This is not an assistant that helps your team write. It produces
-              the finished motion — which means the work that currently leaves
-              your department at outside-counsel rates doesn&apos;t have to.
+              This is not an assistant that helps your team write. It writes
+              the motion. Work that leaves your department at outside counsel
+              rates can stay in it.
             </p>
             <p className="mt-7 font-serif text-[25px] leading-[1.4] text-[var(--apricot)] italic text-pretty">
-              Thousands of dollars a motion, and a document that reads like it
-              came from someone who does this every day.
+              Thousands of dollars a motion, and it reads like someone who
+              does this every day wrote it.
             </p>
           </div>
 
@@ -116,18 +115,17 @@ export default function Home() {
               Where the quality comes from
             </p>
             <h3 className="mt-3 text-[26px] font-semibold">
-              Encoded by the people who grade these
+              Written by the people who read these
             </h3>
             <p className="mt-4 text-[16px] leading-[1.75] text-[var(--text-secondary)]">
-              A general-purpose model writes a generic motion. This one works
-              from a playbook built for one cause of action in one court — the
-              procedural standard, the elements worth attacking, and how that
-              court actually handles them.
+              A general purpose model writes a generic motion. This one works
+              from a playbook built for one cause of action in one court, so it
+              argues the way that court expects.
             </p>
             <p className="mt-4 text-[16px] leading-[1.75] text-[var(--text-secondary)]">
-              A separate citation-verification pass — independent of the model
-              that writes the draft, so it cannot vouch for its own work — is
-              being added now.
+              We are adding a separate pass that checks every citation. It
+              runs independently of the model that writes the draft, so nothing
+              vouches for its own work.
             </p>
           </div>
         </div>
@@ -142,8 +140,7 @@ export default function Home() {
             </h2>
             <p className="mt-4 text-[16px] leading-[1.7] text-[var(--text-secondary)] text-pretty">
               Tell us which causes of action and courts you need. We add
-              playbooks based on what people ask for, so the list grows toward
-              the work you actually have.
+              playbooks based on what people ask for.
             </p>
           </div>
 

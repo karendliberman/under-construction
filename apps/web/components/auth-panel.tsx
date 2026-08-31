@@ -20,12 +20,12 @@ export function AuthPanel() {
           It writes the motion.
         </p>
         <p className="mt-4 font-mono text-[11.5px] tracking-[0.16em] text-[var(--plum)] uppercase">
-          Motions to dismiss · playbook-driven
+          Motions to dismiss
         </p>
       </div>
 
       <div className="space-y-1.5 font-mono text-[11px] tracking-[0.14em] text-[var(--text-muted)] uppercase">
-        <p>Motions to dismiss · playbook-driven</p>
+        <p>Motions to dismiss</p>
       </div>
     </div>
   );

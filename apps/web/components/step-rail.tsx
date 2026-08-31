@@ -13,7 +13,7 @@ export function StepRail({ current }: { current: 1 | 2 | 3 }) {
             {label}
           </span>
           {i < STEPS.length - 1 && (
-            <span className="text-[var(--text-faint)]" aria-hidden>—</span>
+            <span className="text-[var(--text-faint)]" aria-hidden>·</span>
           )}
         </li>
       ))}

@@ -26,8 +26,8 @@ export default function DraftsPage() {
           </span>
           <h2 className="mt-7 font-serif text-[32px] leading-tight">No drafts yet</h2>
           <p className="mx-auto mt-3 max-w-[440px] text-[16px] leading-[1.7] text-[var(--text-secondary)] text-pretty">
-            Pick a cause of action and a jurisdiction, give the agent the facts,
-            and it returns a complete motion in a few minutes.
+            Pick a cause of action and a court, upload the complaint, and you
+            have a complete motion in a few minutes.
           </p>
           <Link href="/drafts/new" className="uc-btn mt-8 no-underline">
             Draft your first motion

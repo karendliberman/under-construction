@@ -14,8 +14,8 @@ export default function NewDraftPage() {
         Pick the combination
       </h1>
       <p className="mt-3 max-w-[620px] text-[16px] leading-[1.7] text-[var(--text-secondary)] text-pretty">
-        Only pairings with a written playbook are offered. The playbook decides
-        the structure of the motion, not a generic template.
+        You only see pairings that have a playbook behind them. The playbook
+        decides the structure of the motion, not a generic template.
       </p>
 
       <div className="mt-10">

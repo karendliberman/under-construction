@@ -72,7 +72,7 @@ export default function LoginPage() {
           </form>
 
           <p className="mt-8 font-mono text-[11px] tracking-[0.14em] text-[var(--text-faint)] uppercase">
-            Forgot password? Email Karen — no self-serve reset yet.
+            Forgot your password? Email Karen and she will reset it.
           </p>
         </div>
       </div>

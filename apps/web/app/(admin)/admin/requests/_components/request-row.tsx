@@ -93,10 +93,10 @@ export function RequestRow(props: {
       {result && "link" in result && (
         <div className="uc-rise mb-6 border-l-4 border-[var(--blue)] bg-[var(--apricot-wash)] p-6">
           <p className="font-mono text-[11px] tracking-[0.16em] text-[var(--blue)] uppercase">
-            Approved — send this single-use link to {result.sendTo}
+            Approved. Send this single-use link to {result.sendTo}
           </p>
           <p className="mt-2 font-mono text-[10.5px] tracking-[0.12em] text-[var(--text-muted)] uppercase">
-            Valid 48 hours · usable once · shown only now
+            Valid 48 hours, usable once, shown only now
           </p>
           <code className="mt-4 block border border-[var(--hairline-warm)] bg-[var(--surface)] p-3 font-mono text-[12px] break-all">
             {result.link}

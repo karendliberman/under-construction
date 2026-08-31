@@ -72,9 +72,9 @@ export function Picker({ causes, jurisdictions }: { causes: Cause[]; jurisdictio
             {cause!.label} <span className="text-[var(--text-faint)]">·</span> {court!.label}
           </p>
           <p className="mt-5 border-t border-[var(--hairline-warm)] pt-5 text-[14px] leading-[1.7] text-[var(--text-secondary)]">
-            The playbook is composed by the worker at drafting time — shared
-            guardrails, the procedural standard, the cause of action, then the
-            jurisdictional gloss.
+            The playbook is assembled at drafting time from the shared
+            guardrails, the procedural standard, the cause of action, and the
+            local practice for this court.
           </p>
         </div>
       )}
