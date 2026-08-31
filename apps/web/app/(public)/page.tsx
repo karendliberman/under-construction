@@ -101,12 +101,12 @@ export default function Home() {
             </p>
             <p className="mt-5 text-[17px] leading-[1.75] text-[rgba(246,243,238,.8)] text-pretty">
               This is not an assistant that helps your team write. It writes
-              the motion. Work that leaves your department at outside counsel
-              rates can stay in it.
+              the motion. The work you would have sent to a firm stays with
+              your team, at a fraction of what the firm would have charged.
             </p>
             <p className="mt-7 font-serif text-[25px] leading-[1.4] text-[var(--apricot)] italic text-pretty">
-              Thousands of dollars a motion, and it reads like someone who
-              does this every day wrote it.
+              Thousands of dollars saved a motion, and it reads like a
+              specialist wrote it.
             </p>
           </div>
 
