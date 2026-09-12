@@ -1,11 +1,12 @@
 # Nomostra
 
-An AI drafting tool for litigators, sold to in-house legal teams. Upload a
-complaint, add a few details, and get back a motion to dismiss drafted against
-a playbook written for that cause of action in that court.
+An AI drafting tool for litigators, sold to in-house legal teams. Paste in the
+complaint filed against your client, add a short client-facts form, and get
+back a motion to dismiss plus a report on every citation in it.
 
-`CLAUDE.md` holds the invariants. `docs/` holds the plan. Read the relevant
-section before starting, not all three at once.
+`CLAUDE.md` holds the invariants. `docs/` holds the plan in four files. Read
+the relevant one before starting, not all of them at once. `docs/pipeline.md`
+is the newest and supersedes the drafting design in the other three.
 
 > The product is **Nomostra**. The repository, npm packages, Python package and
 > Render services are still named `under-construction` / `uc-*` from the
@@ -66,9 +67,9 @@ colima start          # colima stop when finished, it holds ~4GB
 
 ```bash
 npm run typecheck
-npm test                                  # 24 vitest tests, apps/web
+npm test                                  # 33 vitest tests, apps/web
 npm run build
-cd services/agent && .venv/bin/python -m pytest tests -q   # 7 tests
+cd services/agent && .venv/bin/python -m pytest tests -q   # 28 tests
 ```
 
 Both suites run in CI on push, path-filtered so a playbook edit rebuilds only
@@ -101,27 +102,62 @@ human to send. Same security properties as long as it goes to the address on
 the request, and no Resend account or DNS work. It becomes load-bearing at the
 pilot, when recipients are strangers.
 
-**Next: Phase 3, the agent worker.** In order:
+**Phase 3.0, spend controls, is done.** Three layers, because each one catches
+something the others cannot:
 
-1. **3.0 spend controls, before the first API call.** A budget alert in the
-   Anthropic console *and* an app-side cap computed from `generations` that
-   refuses new jobs past a threshold. The console only alerts; the refusal has
-   to live in code. `ANTHROPIC_API_KEY` is deliberately unset on `uc-agent`
-   until this exists.
-2. `matters` and `generations` tables
-3. Case-facts form and `POST /api/generations`
-4. The worker's real job loop, per-job working directory, the Agent SDK call
-5. Draft viewer with the non-dismissible unverified-citations banner
+| Layer | Where | What it bounds |
+|---|---|---|
+| `MAX_TURNS` per node | `services/agent/agent/budget.py` | One agent that will not stop |
+| `SPEND_CAP_PER_GENERATION_USD` (default 50) | worker, between nodes | One motion that loops |
+| `SPEND_CAP_WINDOW_USD` (default 300 / 30 days) | worker before claiming, web before queueing | Everything else |
 
-The design handoff specs the four screens that do not exist yet (case facts,
-generating, draft viewer, failed), so they should go quickly.
+The ledger is `generation_nodes.cost_usd`, not the rollup on `generations`,
+because the rollup is only written when a run finishes and an in-flight
+runaway is exactly the case the cap exists for. Both services read the same
+environment variables and a test fails if their defaults drift.
+
+The defaults are estimates from roughly 40 runs at $5/$25 per million tokens,
+not measurements. **Recalibrate them against the first ten real runs.**
+
+**Still to do before `ANTHROPIC_API_KEY` goes on `uc-agent`:**
+
+- **Set the budget alert in the Anthropic console.** This is a manual step and
+  nobody can do it from the repo. The console only alerts, which is why the
+  refusal above lives in code, but the alert is still the thing that tells a
+  human something is wrong.
+
+**Then Phase 3 proper, in `docs/pipeline.md` §10 order.** It is depth-first on
+one branch rather than layer by layer:
+
+1. `fetch_case`, the domain allowlist, and the Research Gate. All three are
+   model-free, so they are testable against CourtListener with no API key set.
+2. The working-directory layout, and writing `generation_nodes` rows.
+3. **One hardcoded vertical slice**: skip node 01, hand the pipeline one count
+   topic and one issue, and get Researcher to Gate to Drafter producing a
+   single paragraph with a real, verified citation. This is the gate on the
+   whole project. If that paragraph is not clearly better than what Ben writes
+   in twenty minutes, the shape of the rest does not matter.
+4. Citation Verifier on that paragraph, closing the loop on one issue.
+5. Onward per §10: Issue Spotter, Topic Identifier, fan-in, repair loop, UI.
+
+The complaint-paste and client-facts form replaces the cause-of-action picker
+at `/drafts/new`. That page still renders and posts nowhere, so it is not
+broken, just superseded. Delete it when the new form lands.
 
 ## Open items
 
-- **The playbooks are placeholders.** `playbooks/causes-of-action/*.md`,
-  `procedural/*.md` and `jurisdictions/sdny.md` are `TODO (Ben)` skeletons.
-  The machinery works; there is no legal content in it yet. This is the
-  critical path, not the code.
+- **The playbooks are placeholders, and the pipeline needs more of them.**
+  The existing `causes-of-action/*.md`, `procedural/*.md` and
+  `jurisdictions/sdny.md` are `TODO (Ben)` skeletons. `docs/pipeline.md` §9
+  adds a further set that does not exist at all yet: `analysis/read-complaint.md`,
+  `analysis/threshold-defenses.md`, `defenses/<key>.md` per defense,
+  `research/finding-authority.md` and `verification/cite-check.md`. The
+  machinery works; there is no legal content in it. This is the critical path,
+  not the code.
+- **`playbooks/registry.yaml` is still the one-shot shape.** `docs/pipeline.md`
+  §9 restructures it around nodes and defenses and drops the jurisdiction
+  dimension. `apps/web/lib/registry.ts` and `agent/playbooks.py` both read the
+  current shape, so changing it is a cross-cutting job rather than an edit.
 - **Rotate the Neon `neondb_owner` password.** It passed through a chat
   transcript, and there is real user data behind it now.
 - **The marketing page claims citation checking, proofreading and local-rules
@@ -134,9 +170,22 @@ generating, draft viewer, failed), so they should go quickly.
 - `/api/admin/*` is not covered by the middleware matcher and checks
   admin-ness itself. Two places that must agree. Fold it in when Phase 3 adds
   `/api/generations/*`.
-- **The worker moves to 1 CPU / 2 GB at Phase 3.** Anthropic's floor is ~1 GiB
-  RAM per concurrent agent, above the starter instance. Roughly $25/month
-  instead of $7.
+- **The worker needs more RAM than previously budgeted.** `docs/pipeline.md` §8
+  puts concurrency 3 to 4 at 4 GB or more, which is Render's $85 tier, not the
+  $25 / 2 GB tier the one-shot design assumed. Anthropic's starting point is
+  roughly 1 GiB RAM, 1 CPU and 5 GiB disk per concurrent agent, so check disk
+  as well. `PIPELINE_CONCURRENCY` is an environment variable precisely so this
+  can be tuned down instead of paying up. Re-verify Render's current tiers
+  before buying one.
+- **CourtListener's commercial position is unverified.** Its API membership
+  terms read as personal, research and journalistic use rather than commercial
+  products, and the MTD research memo advises contacting Free Law Project about
+  a partnership first. Build step 1 leans on CourtListener, so a bad answer
+  means rework there. Worth asking before that step, not after.
+- **Ben still owes four answers**, all in `docs/pipeline.md` §11: whether the
+  Rule 12 waiver rule is as described, which client-facts fields earn their
+  place, the policy for a low-confidence precondition on a waivable defense,
+  and whether weak issues get argued or only reported.
 
 ## Checking a playbook
 

@@ -7,6 +7,14 @@ This document explains what we're building, where each piece lives, and — for 
 
 **What changed in revision 2.** The drafting step is genuinely agentic — the model decides what to look at next, re-reads the case facts, summarises, and chooses its own steps rather than following a fixed sequence. That means the Claude Agent SDK, and the Agent SDK spawns a `claude` CLI subprocess that owns a shell, a working directory, and session files on local disk. That single fact rules out serverless hosting and reshapes most of what follows.
 
+> **Superseded in part by `docs/pipeline.md` (September 2026, revision 3).**
+> Everything about *drafting* in this document describes the one-shot design: one
+> agent, one cause of action, one jurisdiction, case facts typed into a form.
+> Drafting is now a nine-node pipeline fed by a pasted complaint plus a short
+> client-facts form, with jurisdiction hardcoded in V0. Where the two disagree
+> about the pipeline, `pipeline.md` wins. Everything here about auth, hosting,
+> the two-service split and the database as the only interface still holds.
+
 ---
 
 ## 1. The system at a glance

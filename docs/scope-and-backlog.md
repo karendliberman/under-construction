@@ -5,6 +5,14 @@
 **Companion docs:** `under-construction-architecture.md`, `under-construction-implementation-guide.md`
 **Strategic context:** `legal-ai-startup-strategy-memo.md`, `mtd-direct-to-corporate-thesis-research.md`
 
+> **Superseded in part by `docs/pipeline.md` (September 2026, revision 3).**
+> Everything about *drafting* in this document describes the one-shot design: one
+> agent, one cause of action, one jurisdiction, case facts typed into a form.
+> Drafting is now a nine-node pipeline fed by a pasted complaint plus a short
+> client-facts form, with jurisdiction hardcoded in V0. Where the two disagree
+> about the pipeline, `pipeline.md` wins. Everything here about auth, hosting,
+> the two-service split and the database as the only interface still holds.
+
 ---
 
 ## 0. What we're building, in one paragraph

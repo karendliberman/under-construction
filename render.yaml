@@ -36,6 +36,15 @@ services:
         generateValue: true
       - key: RESEND_API_KEY
         sync: false
+      # Spend controls (Phase 3.0). The web app refuses to queue past these;
+      # the worker holds the authoritative copy. Both read the same names, so
+      # a change here needs the same change on the worker below.
+      - key: SPEND_CAP_WINDOW_USD
+        value: "300"
+      - key: SPEND_WINDOW_DAYS
+        value: "30"
+      - key: GENERATIONS_PER_USER_PER_DAY
+        value: "20"
       # NOTE: no ANTHROPIC_API_KEY. The web service never needs it.
 
   - type: worker
@@ -51,5 +60,17 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
+      # Spend controls (Phase 3.0). This is the authoritative copy: the worker
+      # is what spends the money, and it refuses to claim a job past the
+      # window cap. Keep in step with the web service above.
+      - key: SPEND_CAP_WINDOW_USD
+        value: "300"
+      - key: SPEND_WINDOW_DAYS
+        value: "30"
+      - key: SPEND_CAP_PER_GENERATION_USD
+        value: "50"
+      # DELIBERATELY UNSET until the spend controls are verified in production.
+      # Render will prompt; leave it blank. Setting it is the decision that
+      # makes every other line in this file able to cost money.
       - key: ANTHROPIC_API_KEY
         sync: false
