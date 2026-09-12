@@ -27,7 +27,7 @@ export function AppHeader({
         <Link href="/" className="flex items-baseline gap-2.5 no-underline">
           <span className="size-2.5 shrink-0 bg-[var(--apricot)]" />
           <span className="hidden font-mono text-[12px] tracking-[0.16em] uppercase sm:inline">
-            Under Construction
+            Nomostra
           </span>
         </Link>
         <nav className="flex items-center gap-5 text-[14px]">

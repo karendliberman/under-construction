@@ -11,7 +11,7 @@ export function AuthPanel() {
       <Link href="/" className="flex items-baseline gap-2.5 no-underline">
         <span className="size-[11px] shrink-0 bg-[var(--plum)]" />
         <span className="font-mono text-[13px] tracking-[0.16em] text-[var(--chocolate)] uppercase">
-          Under Construction
+          Nomostra
         </span>
       </Link>
 

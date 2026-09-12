@@ -7,7 +7,7 @@ export function TopBar() {
       <Link href="/" className="flex items-baseline gap-2.5 no-underline">
         <span className="size-[11px] shrink-0 bg-[var(--apricot)]" />
         <span className="font-mono text-[13px] tracking-[0.16em] uppercase">
-          Under Construction
+          Nomostra
         </span>
       </Link>
       <div className="flex items-center gap-4 sm:gap-[26px]">

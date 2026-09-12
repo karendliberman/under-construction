@@ -22,19 +22,19 @@ from agent.playbooks import (
 
 def test_deterministic_across_calls():
     digests = {
-        hashlib.sha256(resolve_playbook("breach-of-contract", "sdny").encode()).hexdigest()
+        hashlib.sha256(resolve_playbook("employment-discrimination", "sdny").encode()).hexdigest()
         for _ in range(10)
     }
     assert len(digests) == 1
 
 
 def test_layer_order_is_shared_procedural_substantive_jurisdiction():
-    composed = resolve_playbook("breach-of-contract", "sdny")
+    composed = resolve_playbook("employment-discrimination", "sdny")
     positions = [
         composed.index("# Guardrails"),
         composed.index("# House style"),
         composed.index("# Rule 12(b)(6)"),
-        composed.index("# Breach of contract"),
+        composed.index("# Employment discrimination"),
         composed.index("# S.D.N.Y."),
     ]
     assert positions == sorted(positions), "jurisdiction must come last so it overrides"
@@ -52,9 +52,9 @@ def test_unknown_cause_rejected():
 
 
 def test_combination_not_declared_is_rejected():
-    """breach-of-contract exists and nd-cal may exist, but the pair does not."""
+    """The cause of action exists and nd-cal may exist, but not together."""
     with pytest.raises(PlaybookError):
-        resolve_playbook("breach-of-contract", "nd-cal")
+        resolve_playbook("employment-discrimination", "nd-cal")
 
 
 def test_registry_files_all_exist():

@@ -4,10 +4,12 @@ import { useState } from "react";
 
 type State = { kind: "idle" | "sending" } | { kind: "done" } | { kind: "error"; message: string };
 
+// `firm` is still accepted by the API and still in the schema; it is simply no
+// longer asked for. Dropping the column would be a migration, and an optional
+// field nobody fills costs nothing.
 const FIELDS = [
-  { name: "fullName", label: "Full name", required: true, autoComplete: "name" },
-  { name: "email", label: "Work email", required: true, type: "email", autoComplete: "email" },
-  { name: "firm", label: "Firm" },
+  { name: "fullName", label: "Name", required: true, autoComplete: "name" },
+  { name: "email", label: "Email", required: true, type: "email", autoComplete: "email" },
   { name: "jurisdiction", label: "Where do you practice?" },
 ] as const;
 
@@ -66,7 +68,7 @@ export function RequestAccessForm() {
 
       <div className="mt-6">
         <label className="uc-label" htmlFor="useCase">
-          Which causes of action and courts do you need?
+          Which playbooks do you need?
         </label>
         <textarea
           id="useCase"

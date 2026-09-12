@@ -1,5 +1,5 @@
 # The ONLY file in playbooks/ the web service may read (invariant 2).
-# Labels and filenames — never prose.
+# Labels and filenames, never prose.
 #
 # Adding a cause of action is two files and an entry here.
 #
@@ -13,16 +13,16 @@ shared:
   - _shared/house-style.md
 
 causes_of_action:
-  breach-of-contract:
-    label: "Breach of Contract"
+  employment-discrimination:
+    label: "Employment Discrimination"
     procedural: procedural/rule-12b6-federal.md
-    substantive: causes-of-action/breach-of-contract.md
+    substantive: causes-of-action/employment-discrimination.md
     jurisdictions: [sdny]
 
-  fraud:
-    label: "Fraud"
+  ada:
+    label: "Americans with Disabilities Act"
     procedural: procedural/rule-12b6-federal.md
-    substantive: causes-of-action/fraud.md
+    substantive: causes-of-action/ada.md
     jurisdictions: [sdny]
 
 jurisdictions:

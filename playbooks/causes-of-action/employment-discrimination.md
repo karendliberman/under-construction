@@ -1,6 +1,6 @@
-# Fraud
+# Employment discrimination
 
-> **PLACEHOLDER — not legal content.** This file exists so the resolver, the
+> **PLACEHOLDER, not legal content.** This file exists so the resolver, the
 > preview CLI and the picker can be built and tested end to end. It is Ben's to
 > write (backlog 2.3), and nothing here has been reviewed by a lawyer.
 >
@@ -11,12 +11,12 @@
 
 ## Elements
 
-TODO (Ben).
+TODO (Ben): the elements as a checklist the drafter walks the complaint against.
 
-## Heightened pleading
+## Where these complaints are usually weak
 
-TODO (Ben): what particularity requires in practice, and how it interacts with
-the general standard in the procedural layer.
+TODO (Ben): the failure patterns you actually see. This is the part that makes
+the playbook worth more than a general purpose model.
 
 ## Arguments in rough order of strength
 
@@ -24,4 +24,4 @@ TODO (Ben).
 
 ## Traps
 
-TODO (Ben).
+TODO (Ben): arguments that look attractive and lose.

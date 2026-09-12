@@ -27,7 +27,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Under Construction · file-ready motions to dismiss",
+  title: "Nomostra · file-ready motions to dismiss",
   description:
     "Upload the complaint and get back a complete motion to dismiss, built with a playbook written for that cause of action and court, at a fraction of outside counsel.",
 };

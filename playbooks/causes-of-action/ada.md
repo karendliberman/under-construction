@@ -1,6 +1,6 @@
-# Breach of contract
+# Americans with Disabilities Act
 
-> **PLACEHOLDER — not legal content.** This file exists so the resolver, the
+> **PLACEHOLDER, not legal content.** This file exists so the resolver, the
 > preview CLI and the picker can be built and tested end to end. It is Ben's to
 > write (backlog 2.3), and nothing here has been reviewed by a lawyer.
 >
@@ -15,8 +15,8 @@ TODO (Ben): the elements as a checklist the drafter walks the complaint against.
 
 ## Where these complaints are usually weak
 
-TODO (Ben): the failure patterns you actually see — the part that makes this
-playbook worth more than a general-purpose model.
+TODO (Ben): the failure patterns you actually see. This is the part that makes
+the playbook worth more than a general purpose model.
 
 ## Arguments in rough order of strength
 
