@@ -24,7 +24,8 @@ jobs:
       - run: pip install "./services/agent[dev]"
       - name: Import check
         run: python -c "import agent.loop; print('worker imports cleanly')"
-      - name: Resolver tests
-        # Guards invariant 6. If resolve_playbook stops being deterministic,
-        # generations.playbook_version silently stops meaning anything.
+      - name: Tests
+        # Guards invariant 6 (resolve_playbook stays deterministic, or
+        # generations.playbook_version silently stops meaning anything) and,
+        # since Phase 3.0, the spend controls.
         run: python -m pytest services/agent/tests -q

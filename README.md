@@ -86,6 +86,21 @@ git clone . /tmp/clone-test && cd /tmp/clone-test
 docker build --no-cache -f apps/web/Dockerfile -t uc-web:test .
 ```
 
+**Migrations are not applied automatically.** Nothing in `render.yaml` or
+either Dockerfile runs `drizzle-kit migrate`, so a deploy ships code against
+whatever schema production already has. When a change adds a table or a
+column, run the migration against the Neon **production** branch *before*
+pushing, or the new code queries a table that is not there yet.
+
+```bash
+DATABASE_URL='<neon production branch>' npm run db:migrate
+```
+
+The failure is quiet rather than loud: the worker's outer handler catches the
+error, logs it and sleeps, so it looks alive while claiming nothing.
+Automating this with a Render pre-deploy command is worth doing and has not
+been done.
+
 ## Where we are
 
 **Phases 0, 1 and 2 are complete and deployed.**
