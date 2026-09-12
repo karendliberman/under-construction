@@ -29,7 +29,7 @@ services:
       # container's internal bind address (0.0.0.0:10000) — which produced
       # unreachable links for real users.
       - key: APP_URL
-        value: https://uc-web.onrender.com
+        value: https://nomostra.com
       - key: DATABASE_URL
         sync: false
       - key: SESSION_SECRET

@@ -27,15 +27,16 @@ export default function Home() {
         <div className="mx-auto grid max-w-[1240px] items-end gap-10 lg:grid-cols-[1.12fr_.88fr] lg:gap-[60px]">
           <div>
             <h1 className=" font-serif text-[clamp(3rem,8vw,94px)] leading-[.95] tracking-[-0.02em] text-balance">
-              Send the complaint.
+              Send your complaint.
               <br />
               <span className="text-[var(--plum)] italic">Get back a file-ready motion.</span>
             </h1>
             <p className="mt-6 max-w-[560px] text-[19px] leading-[1.6] text-[var(--text-secondary)] text-pretty">
               Upload the complaint and add a few details about the matter. A
-              few minutes later you have a complete motion to dismiss, built
-              with a playbook written for that cause of action in that court.
-              It is the same document outside counsel bills you thousands for.
+              few minutes later you&apos;ll have a complete motion to dismiss,
+              built with a playbook specifically written for your claim in your
+              jurisdiction, the same work you&apos;d otherwise pay thousands
+              for.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-6">
               <a
@@ -136,8 +137,8 @@ export default function Home() {
               Request Access
             </h2>
             <p className="mt-4 text-[16px] leading-[1.7] text-[var(--text-secondary)] text-pretty">
-              Tell us which playbooks you need. Client requests drive us to
-              expand our coverage.
+              Tell us which playbooks you need. Client requests drive our
+              coverage expansion.
             </p>
           </div>
 
