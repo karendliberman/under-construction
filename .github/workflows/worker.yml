@@ -28,4 +28,12 @@ jobs:
         # Guards invariant 6 (resolve_playbook stays deterministic, or
         # generations.playbook_version silently stops meaning anything) and,
         # since Phase 3.0, the spend controls.
+        #
+        # PLAYBOOKS_DIR is required here and nowhere else. `pip install` (not
+        # editable) copies the package into site-packages, so playbooks_dir()'s
+        # walk up from __file__ finds no sibling playbooks/ directory. In the
+        # repo and in the Docker image the walk works, which is why this only
+        # ever broke in CI. The override exists for precisely this case.
         run: python -m pytest services/agent/tests -q
+        env:
+          PLAYBOOKS_DIR: ${{ github.workspace }}/playbooks
