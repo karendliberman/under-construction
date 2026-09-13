@@ -193,16 +193,37 @@ empty.
 Connections drop and new ones cannot open, so it takes the web service and
 nomostra.com down with it, not just the worker.
 
-What to do about it:
+### The operating model this forces
 
-- **Suspend `uc-agent` on Render whenever nobody is testing.** This is the
-  actual fix while V0 has no users, and it costs nothing.
-- `WORKER_POLL_SECONDS` sets the interval. 3 while you are testing, 900 when
-  the service is left running idle. Note this is a dial, not a fix: anything
-  under 5 minutes is the same 100% awake.
-- Before the pilot, pay for the database. A continuously polling worker is not
-  compatible with a free tier that bills awake time, and the pilot cannot have
-  the site going dark mid-month.
+**`uc-agent` is suspended by default and resumed only for a testing session.**
+Decided September 2026, and it is the right shape while V0 has no users: an
+idle worker is pure cost, because it spends the compute budget asking an empty
+queue whether it is empty.
+
+Two things enforce it rather than relying on memory:
+
+- `autoDeploy: false` on the worker in `render.yaml`, so pushing to main
+  cannot quietly resume the meter. Render's docs do not say whether a push
+  wakes a suspended service, and this is not a thing to discover empirically.
+- `WORKER_POLL_SECONDS` is 900 in `render.yaml`, so a worker resumed and then
+  forgotten burns about 61 CU-hours a month instead of 182. Still over
+  allowance, but it buys weeks rather than days.
+
+A testing session, in order:
+
+1. Render, `uc-agent`, set `WORKER_POLL_SECONDS` to `3`, resume the service.
+2. Deploy it manually. `autoDeploy` is off, so the latest push is not on it.
+3. Test.
+4. **Suspend it again and set the variable back to 900.** This is the step
+   that gets skipped, and it is the one that costs money.
+
+Also worth knowing: **connecting to the production database wakes it** and
+starts a 5-minute billing timer, so idle poking around in production is not
+free either. Prefer the dev branch for anything exploratory.
+
+Before the pilot, pay for the database. A polling worker is not compatible
+with a free tier that bills awake time, and a pilot cannot have the site going
+dark mid-month.
 
 Check actual consumption in Neon under Monitoring, which breaks it down per
 branch.

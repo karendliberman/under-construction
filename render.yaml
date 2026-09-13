@@ -53,6 +53,16 @@ services:
     dockerfilePath: ./services/agent/Dockerfile
     dockerContext: .
     plan: starter
+    # SUSPENDED BY DEFAULT, and deployed by hand. Not a quirk — this service
+    # polls the database, and Neon bills by how long the database is awake, so
+    # a worker left running with an empty queue is a pure cost. It burned 88%
+    # of a month's compute allowance doing nothing but asking.
+    #
+    # autoDeploy is off so that pushing to main cannot quietly resume the
+    # meter. Render's docs do not say whether a push wakes a suspended
+    # service, and the failure mode is expensive enough not to find out.
+    # Deploy this one manually when you are about to test.
+    autoDeploy: false
     buildFilter:
       paths:
         - services/agent/**
