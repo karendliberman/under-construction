@@ -69,6 +69,16 @@ services:
         value: "30"
       - key: SPEND_CAP_PER_GENERATION_USD
         value: "50"
+      # Neon bills CU-hours, which is how long the database is AWAKE, not how
+      # much is in it. Free plan scale-to-zero needs a 5-minute quiet gap, so
+      # anything under 5 min pins the compute at 100% awake and burns ~182
+      # CU-hours a month against a 100 CU-hour allowance. Running out suspends
+      # the whole project, this repo's web service included.
+      #
+      # 900s while the queue is normally empty. Drop it to 3 for a testing
+      # session, or better, suspend this service when nobody is testing.
+      - key: WORKER_POLL_SECONDS
+        value: "900"
       # DELIBERATELY UNSET until the spend controls are verified in production.
       # Render will prompt; leave it blank. Setting it is the decision that
       # makes every other line in this file able to cost money.

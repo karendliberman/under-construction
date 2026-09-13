@@ -171,6 +171,42 @@ The complaint-paste and client-facts form replaces the cause-of-action picker
 at `/drafts/new`. That page still renders and posts nowhere, so it is not
 broken, just superseded. Delete it when the new form lands.
 
+## The database has a compute budget, and the worker eats it
+
+Neon Free gives **100 CU-hours per project per month**. A CU-hour measures how
+long the compute is *awake*, and has nothing to do with how much is stored.
+0.5 GB of storage is not the constraint and never was.
+
+The compute scales to zero after **5 minutes** of inactivity, and that timeout
+cannot be changed on the free plan. So a worker polling every 3 seconds never
+lets it sleep: 730 hours a month at 0.25 CU is about **182 CU-hours**, against
+an allowance of 100, spent entirely on asking an empty queue whether it is
+empty.
+
+| Poll every | Compute awake | CU-hr/month |
+|---|---|---|
+| 3s to 5min | 100% | ~182 |
+| 15 min | 33% | ~61 |
+| 30 min | 17% | ~30 |
+
+**Running out suspends the whole project until the next billing period.**
+Connections drop and new ones cannot open, so it takes the web service and
+nomostra.com down with it, not just the worker.
+
+What to do about it:
+
+- **Suspend `uc-agent` on Render whenever nobody is testing.** This is the
+  actual fix while V0 has no users, and it costs nothing.
+- `WORKER_POLL_SECONDS` sets the interval. 3 while you are testing, 900 when
+  the service is left running idle. Note this is a dial, not a fix: anything
+  under 5 minutes is the same 100% awake.
+- Before the pilot, pay for the database. A continuously polling worker is not
+  compatible with a free tier that bills awake time, and the pilot cannot have
+  the site going dark mid-month.
+
+Check actual consumption in Neon under Monitoring, which breaks it down per
+branch.
+
 ## Open items
 
 - **The playbooks are placeholders, and the pipeline needs more of them.**

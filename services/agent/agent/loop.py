@@ -9,12 +9,37 @@ pooling and no caveats, and for a job that takes minutes, three seconds of
 latency is invisible.
 """
 
+import os
 import socket
 import time
 
 from . import budget, db
 
-POLL_SECONDS = 3
+# HOW OFTEN THIS TOUCHES THE DATABASE IS A BILLING DECISION, not a latency one.
+#
+# Neon bills CU-hours: how long the compute is *awake*, with no relation to how
+# much data is stored. Free plan is 100 CU-hours per project per month, and the
+# compute scales to zero after 5 minutes of inactivity — a timeout that cannot
+# be changed on that plan.
+#
+# So any poll interval under 5 minutes keeps the database awake 100% of the
+# time, and 730 hours a month at 0.25 CU is ~182 CU-hours: nearly double the
+# free allowance, spent entirely on asking an empty queue whether it is empty.
+# Running out suspends the whole project, web service included, until the next
+# billing period.
+#
+#   poll every 3s .. 5min   100% awake   ~182 CU-hr/month
+#   poll every 15min         33% awake    ~61 CU-hr/month
+#   poll every 30min         17% awake    ~30 CU-hr/month
+#
+# Raising this is therefore not a fix so much as a dial. The two real options
+# are to suspend the worker when nobody is testing, or to pay for the database.
+# A short interval is right while testing and wrong when idle, which is exactly
+# what an environment variable is for.
+#
+# Latency is not the constraint: a motion takes 45 to 90 minutes to draft, so
+# minutes of queue delay are invisible to the user.
+POLL_SECONDS = int(os.environ.get("WORKER_POLL_SECONDS", "3"))
 STALE_AFTER = "5 minutes"
 
 # FOR UPDATE SKIP LOCKED is the standard Postgres job-queue idiom: two workers
@@ -90,6 +115,7 @@ def main():
         f"${budget.window_cap()} per {budget.window_days()} days",
         flush=True,
     )
+    print(f"worker: polling every {POLL_SECONDS}s", flush=True)
 
     conn = db.connect()
     print("worker: connected to database", flush=True)
