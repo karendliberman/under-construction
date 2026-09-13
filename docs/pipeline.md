@@ -360,7 +360,14 @@ Same shape, one `frame` field distinguishing them, so nodes 03–06 need no spec
 
 **Never retrieve Westlaw or Lexis content.** Raw opinions and statutes are public domain — CourtListener, the Caselaw Access Project, govinfo, Cornell LII. Headnotes and editorial content are not. In *Thomson Reuters v. ROSS Intelligence* the court granted partial summary judgment in February 2025 on direct infringement of 2,243 Westlaw headnotes and rejected fair use at that stage; the question went to the Third Circuit on interlocutory appeal, so the holding isn't final. ROSS itself ceased operations in 2021 under the cost of the litigation. **The unsettled appeal is a reason to be more conservative, not less.** Enforce it with an allowlist in code — pin `WebSearch` with `allowed_domains` and hard-allowlist the domains `fetch_case` accepts. A model told not to visit a domain is a request; an allowlist is a control.
 
-Also worth starting now: per the MTD research memo, CourtListener's API membership terms are scoped to personal, research and journalistic use rather than commercial products, and the memo's advice is to contact Free Law Project about a partnership before building a commercial product on it. Treat the exact commercial position as unverified until asked — and note build step 1 leans on CourtListener, so a bad answer means rework there.
+**DECIDED, September 2026 (Karen): no legal-database API. Public web only.** `fetch_case` does a plain HTTP GET against an allowlisted public-domain source and extracts the opinion text from the page. No account, no token, no API terms to negotiate.
+
+This resolves the open question that stood here. Per the MTD research memo, CourtListener's *API membership* terms are scoped to personal, research and journalistic use rather than commercial products, and the memo advised contacting Free Law Project before building a commercial product on the API. Not using the API sidesteps that entirely. The underlying opinions are public domain either way; invariant 9 and the domain allowlist are what keep us clear of Westlaw and Lexis editorial content, and neither depends on how we fetch.
+
+Two consequences to build for rather than discover:
+
+- **Extracting text from HTML is more brittle than parsing JSON.** A layout change gives us a page of navigation chrome instead of an opinion. This is precisely what node 04 is for: `text_present` rejects a file that is too short to be an opinion, and `quotes_verbatim` rejects one whose text does not contain the quoted passage. A bad extraction costs that case, not the issue. Do not paper over extraction failures inside `fetch_case`; let the Gate see them.
+- **Be a good citizen.** Identify the client in a `User-Agent`, respect `robots.txt`, rate-limit ourselves, and cache by `case_key` so the same opinion is fetched once per job rather than once per researcher. The dedup in §3 was written for token cost; it is now also what keeps our request volume defensible.
 
 ### 04 Research Gate — deterministic, no model
 
@@ -741,7 +748,7 @@ New playbook files, all Ben's work and all on the critical path:
 
 Depth-first on a single branch, then widen.
 
-1. **`fetch_case`, the domain allowlist, and the Research Gate** — same code path, and the gate is a pure function that's easy to test. Test both standalone against CourtListener before any agent touches them.
+1. **`fetch_case`, the domain allowlist, and the Research Gate** — same code path, and the gate is a pure function that's easy to test. Test both standalone against real public opinion pages before any agent touches them. Public web only, no API: see node 03.
 2. **The working-directory layout and `generation_nodes`.**
 3. **One hardcoded vertical slice:** skip node 01, hand the pipeline one topic and one issue by hand, and get Researcher → Gate → Drafter producing one paragraph with a real, verified citation. **This is the gate on the whole project.** Use a `count` topic — element analysis is the simpler of the two frames.
 4. **The Citation Verifier** on that paragraph. Closed loop on one issue.

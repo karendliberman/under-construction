@@ -156,7 +156,8 @@ not measurements. **Recalibrate them against the first ten real runs.**
 one branch rather than layer by layer:
 
 1. `fetch_case`, the domain allowlist, and the Research Gate. All three are
-   model-free, so they are testable against CourtListener with no API key set.
+   model-free, so they are testable against real opinion pages with no API key
+   set. Public web only, no legal-database API.
 2. The working-directory layout, and writing `generation_nodes` rows.
 3. **One hardcoded vertical slice**: skip node 01, hand the pipeline one count
    topic and one issue, and get Researcher to Gate to Drafter producing a
@@ -203,11 +204,10 @@ broken, just superseded. Delete it when the new form lands.
   as well. `PIPELINE_CONCURRENCY` is an environment variable precisely so this
   can be tuned down instead of paying up. Re-verify Render's current tiers
   before buying one.
-- **CourtListener's commercial position is unverified.** Its API membership
-  terms read as personal, research and journalistic use rather than commercial
-  products, and the MTD research memo advises contacting Free Law Project about
-  a partnership first. Build step 1 leans on CourtListener, so a bad answer
-  means rework there. Worth asking before that step, not after.
+- ~~CourtListener's commercial position is unverified.~~ **Closed.** We are not
+  using any legal-database API. `fetch_case` fetches public opinion pages over
+  plain HTTP from an allowlisted set of public-domain sources, so the API
+  membership terms never apply. See `docs/pipeline.md` node 03.
 - **Ben still owes four answers**, all in `docs/pipeline.md` §11: whether the
   Rule 12 waiver rule is as described, which client-facts fields earn their
   place, the policy for a low-confidence precondition on a waivable defense,
