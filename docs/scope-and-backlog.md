@@ -111,7 +111,7 @@ The heart of it, and the phase that grew when we went agentic.
 
 | # | Task | Notes |
 |---|---|---|
-| 3.0 | **Set the spend controls before the first API call:** a budget alert in the Anthropic console, and an app-side cap computed from the `generations` table that refuses new jobs above a threshold | The console gives you an *alert*, not a hard stop — the refusal has to live in your code. Agent cost is variable; an overnight retry loop is expensive and avoidable |
+| 3.0 | **Set the spend controls before the first API call:** a budget alert in the Anthropic console, and an app-side cap computed from the `generations` table that refuses new jobs above a threshold | CORRECTED Sept 2026: the console limit *is* a hard stop (Settings > Billing; HTTP 400 past it), so this is defense in depth rather than the only line. Keep the app-side cap because the console's is monthly, org-wide, and kills jobs mid-run; ours refuses before claiming. Set the console limit above ours |
 | 3.1 | `matters` and `generations` tables, with `status` doubling as the queue | Architecture doc §7 |
 | 3.2 | Case-facts form: a few structured fields plus a large free-text narrative | Don't over-engineer it. The narrative does most of the work in V0 |
 | 3.3 | `POST /api/generations` → row with `status = 'queued'`, returns an id immediately | Async is not optional with an agent |

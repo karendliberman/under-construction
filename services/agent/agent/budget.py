@@ -8,8 +8,17 @@ Three layers, because each one catches something the others cannot:
   3. `WINDOW_CAP`         — a rolling window across every generation. Bounds
                             everything else, including us pushing a bad build.
 
-The Anthropic console gives a budget *alert*, which tells you after the fact.
-The refusal has to live here.
+WHY BOTH THIS AND THE CONSOLE LIMIT. The Anthropic console's spend limit is a
+real hard stop (Settings > Billing; requests past it return HTTP 400), so this
+module is not the only thing standing between us and a runaway. It is still
+worth having, because the console limit is monthly, org-wide, and blunt:
+hitting it means every job fails mid-run with an API error, forty minutes in,
+with the work lost. These caps are a rolling window and a per-job breaker, and
+they refuse *before* claiming rather than failing partway through.
+
+Set the console limit ABOVE the window cap here, so this one trips first and
+gracefully, and the console stays the backstop for the case where this code is
+the thing that is broken.
 
 WHERE THE LEDGER IS. Cost is summed from `generation_nodes`, not from
 `generations.cost_usd`. The rollup on `generations` is written when a run

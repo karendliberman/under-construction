@@ -136,10 +136,21 @@ not measurements. **Recalibrate them against the first ten real runs.**
 
 **Still to do before `ANTHROPIC_API_KEY` goes on `uc-agent`:**
 
-- **Set the budget alert in the Anthropic console.** This is a manual step and
-  nobody can do it from the repo. The console only alerts, which is why the
-  refusal above lives in code, but the alert is still the thing that tells a
-  human something is wrong.
+- **Set the spend limit in the Anthropic console**, at Settings > Billing >
+  Spend limits. This is a manual step nobody can do from the repo.
+
+  Correcting the plan here: the console limit is a **hard stop**, not just an
+  alert. Requests past it return HTTP 400 `invalid_request_error`, and each
+  usage tier also carries an automatic monthly cap (Start $500, Build $1,000)
+  that returns 429 with `enforced_spend_limit_reached`. `docs/implementation.md`
+  and `docs/scope-and-backlog.md` both said the console only alerts. It does
+  not, and both are corrected.
+
+  That does not make the app-side cap redundant. Set the console limit *above*
+  our window cap, so ours trips first and refuses a job cleanly at submit,
+  while the console remains the backstop for the case where our code is the
+  thing that broke. Hitting the console limit means jobs die mid-run with an
+  API error and the work is lost.
 
 **Then Phase 3 proper, in `docs/pipeline.md` §10 order.** It is depth-first on
 one branch rather than layer by layer:
