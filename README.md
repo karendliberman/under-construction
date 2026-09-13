@@ -242,8 +242,21 @@ branch.
   §9 restructures it around nodes and defenses and drops the jurisdiction
   dimension. `apps/web/lib/registry.ts` and `agent/playbooks.py` both read the
   current shape, so changing it is a cross-cutting job rather than an edit.
-- **Rotate the Neon `neondb_owner` password.** It passed through a chat
-  transcript, and there is real user data behind it now.
+- **Neon `neondb_owner`: production rotated September 2026, dev not.** The
+  production password leaked through a terminal error that printed the whole
+  command line, so it was reset and `DATABASE_URL` updated on both Render
+  services. Verified afterwards by a login probe returning 401 rather than a
+  500, which proves the query reached the database.
+
+  The **dev** branch password is unrotated and may be the one from the earlier
+  transcript leak. Deferred deliberately: Neon roles are per branch, so a dev
+  credential reaches only the dev branch, and dev holds no user data.
+
+  One consequence worth knowing before deciding that is fine forever: dev and
+  production **share the project's 100 CU-hour monthly compute allowance**. So
+  a leaked dev credential cannot read production data, but it can exhaust the
+  allowance, and running out suspends the whole project including the live
+  site. Low likelihood, but the blast radius is not zero.
 - **The marketing page claims citation checking, proofreading and local-rules
   compliance that do not exist yet.** Deliberate, on the understanding that
   production will have them. It contradicts the invariant that V0 output has
